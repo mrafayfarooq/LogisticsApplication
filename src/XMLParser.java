@@ -9,10 +9,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import org.w3c.dom.DOMException;
 import java.io.IOException;
-
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 public class XMLParser implements Parser {
-    private Document document;
+    private NodeList xmlEntries;
+
     @Override
     public void parseFileWithName(String name) {
         try {
@@ -25,9 +27,11 @@ public class XMLParser implements Parser {
                 System.exit(-1);
             }
 
-            this.document = db.parse(xml);
-            document.getDocumentElement().normalize();
-        } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
+            Document doc = db.parse(xml);
+            doc.getDocumentElement().normalize();
+            this.xmlEntries = doc.getDocumentElement().getChildNodes();
+
+            } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
             e.printStackTrace();
         }
     }

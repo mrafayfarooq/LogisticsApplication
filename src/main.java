@@ -9,6 +9,7 @@ class main {
         XMLParser parser = new XMLParser();
         parser.parseFileWithName(facilitiesAndNetworks);
 
+
         /*
         try {
             String fileName = "inputs/Facilities&Network.xml";
