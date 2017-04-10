@@ -10,7 +10,6 @@ import java.io.File;
 import org.w3c.dom.DOMException;
 import java.io.IOException;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
 
 public class XMLParser implements Parser {
     private NodeList xmlEntries;
@@ -33,6 +32,13 @@ public class XMLParser implements Parser {
 
             } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
             e.printStackTrace();
+        }
+    }
+    public NodeList getXmlEntries() throws NullException {
+        if (xmlEntries == null) {
+            throw new NullException("XML Entries");
+        } else {
+            return xmlEntries;
         }
     }
 }

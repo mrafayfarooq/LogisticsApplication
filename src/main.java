@@ -1,13 +1,22 @@
+import org.w3c.dom.NodeList;
 /**
  * Created by Muhammad Rafay on 4/8/17.
  */
-
 class main {
     public static void main(String[] args) {
         String facilitiesAndNetworks = "inputs/Facilities&Network.xml";
 
         XMLParser parser = new XMLParser();
         parser.parseFileWithName(facilitiesAndNetworks);
+        try {
+            NodeList parsedFile = parser.getXmlEntries();
+            FacilityManager facilityManager = new FacilityManager("Id", "Location", "ProcessingPowerPerDay", "Cost");
+            facilityManager.loadFacilitiesAndNetwork(parsedFile);
+            System.out.println(facilityManager.getFacilityDetails());
+        }catch (NullException e) {
+            e.printException();
+        }
+        // parser.parseFileWithName(facilitiesAndNetworks);
 
 
         /*
