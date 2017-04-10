@@ -16,28 +16,30 @@ public class FacilityManager {
     private String locationTag;
     private String powerTag;
     private String costTag;
+
     FacilityManager(String idTag, String locationTag, String powerTag, String costTag) {
         this.idTag = idTag;
         this.locationTag = locationTag;
         this.powerTag = powerTag;
         this.costTag = costTag;
     }
-    public void loadFacilitiesAndNetwork(NodeList facilitiesAndNetwork) {
-        for (int i = 0; i < facilitiesAndNetwork.getLength(); i++) {
-            if (facilitiesAndNetwork.item(i).getNodeType() == Node.TEXT_NODE) {
+    public void loadFacilitiesAndNetwork(NodeList facilities) {
+        for (int i = 0; i < facilities.getLength(); i++) {
+            if (facilities.item(i).getNodeType() == Node.TEXT_NODE) {
                 continue;
             }
-            String entryName = facilitiesAndNetwork.item(i).getNodeName();
+
+            String entryName = facilities.item(i).getNodeName();
             if (!entryName.equals("Facility")) {
                 System.err.println("Unexpected node found: " + entryName);
                 return;
             }
-            // Get Node Id
-            NamedNodeMap aMap = facilitiesAndNetwork.item(i).getAttributes();
+             // Get Node Id
+            NamedNodeMap aMap = facilities.item(i).getAttributes();
             String facilityId = aMap.getNamedItem(idTag).getNodeValue();
 
             // Get Attributes
-            Element elem = (Element) facilitiesAndNetwork.item(i);
+            Element elem = (Element) facilities.item(i);
             String location = elem.getElementsByTagName(locationTag).item(0).getTextContent();
             String processingPowerPerDay = elem.getElementsByTagName(powerTag).item(0).getTextContent();
             String cost = elem.getElementsByTagName(costTag).item(0).getTextContent();

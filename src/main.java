@@ -10,10 +10,18 @@ class main {
         parser.parseFileWithName(facilitiesAndNetworks);
         try {
             NodeList parsedFile = parser.getXmlEntries();
+
             FacilityManager facilityManager = new FacilityManager("Id", "Location", "ProcessingPowerPerDay", "Cost");
             facilityManager.loadFacilitiesAndNetwork(parsedFile);
+
+            NetworkManager networkManager = new NetworkManager("Location", "Distance");
+            networkManager.loadNetworks(parsedFile);
+
+
             System.out.println(facilityManager.getFacilityDetails());
-        }catch (NullException e) {
+            System.out.println(networkManager.getNetworkDetils());
+
+        } catch (NullException e) {
             e.printException();
         }
         // parser.parseFileWithName(facilitiesAndNetworks);
