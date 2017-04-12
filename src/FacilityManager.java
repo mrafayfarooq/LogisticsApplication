@@ -55,7 +55,4 @@ public class FacilityManager {
             return this.facility;
         }
     }
-    //FacilityManager(String)
-   // public void loadFacilities(NodeList)
-
 }
