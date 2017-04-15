@@ -8,32 +8,33 @@ class main {
         String itemCatalog = "inputs/ItemCatalog.xml";
         String facilityInventory = "inputs/FacilityInventory.xml";
 
-
         XMLParser parser = new XMLParser();
-        parser.parseFileWithName(facilitiesAndNetworks);
         try {
+            parser.parseFileWithName(facilitiesAndNetworks);
             NodeList parsedFile = parser.getXmlEntries();
+            Output out = new Output();
 
-            FacilityManager facilityManager = new FacilityManager("Id", "Location", "ProcessingPowerPerDay", "Cost");
-            facilityManager.loadFacilitiesAndNetwork(parsedFile);
+            LogisticManager facility = LogisticFactory.getObject("Facility");
+            facility.load(parsedFile);
 
-            NetworkManager networkManager = new NetworkManager("Location", "Distance");
-            networkManager.loadNetworks(parsedFile);
+            LogisticManager network  = LogisticFactory.getObject("Network");
+            network.load(parsedFile);
+
+            LogisticManager inventory = LogisticFactory.getObject("Inventory");
+            parser.parseFileWithName(facilityInventory);
+            parsedFile = parser.getXmlEntries();
+            inventory.load(parsedFile);
+
+            out.printFacilityDetails(facility, network, inventory);
+
+
 
             ItemManager itemManager = new ItemManager("ItemID", "Price");
             parser.parseFileWithName(itemCatalog);
             parsedFile = parser.getXmlEntries();
             itemManager.loadItems(parsedFile);
 
-            InventoryManager inventoryManager = new InventoryManager("Id", "ItemID", "Quantity");
-            parser.parseFileWithName(facilityInventory);
-            parsedFile = parser.getXmlEntries();
-            inventoryManager.loadInventory(parsedFile);
 
-            System.out.println(facilityManager.getFacilityDetails());
-            System.out.println(networkManager.getNetworkDetils());
-            System.out.println(itemManager.getItemDetails());
-            System.out.println(inventoryManager.getFacilityInventoryDetails());
 
         } catch (NullException e) {
             e.printException();

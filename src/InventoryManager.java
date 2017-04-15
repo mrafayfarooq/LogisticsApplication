@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Muhammad Rafay on 4/11/17.
  */
-public class InventoryManager {
+public class InventoryManager implements LogisticManager {
     private HashMap<Integer, List<String>> facilityInventory = new HashMap<>();
     private List inventoryDetails = new ArrayList<>();
     private String facilityIdTag;
@@ -23,7 +23,7 @@ public class InventoryManager {
         this.quantityTag = quantityTag;
     }
 
-    public void loadInventory(NodeList facilityInventoryDetails) {
+    public void load(NodeList facilityInventoryDetails) {
         for (int i = 0; i < facilityInventoryDetails.getLength(); i++) {
             if (facilityInventoryDetails.item(i).getNodeType() == Node.TEXT_NODE) {
                 continue;
@@ -44,7 +44,7 @@ public class InventoryManager {
                 elem = (Element) inventoryList.item(j);
                 String itemId = elem.getElementsByTagName(itemIdTag).item(0).getTextContent();
                 String quantity = elem.getElementsByTagName(quantityTag).item(0).getTextContent();
-                inventory.add(itemId + "-" + quantity);
+                inventory.add(itemId + ":" + quantity);
             }
             inventoryDetails =  new ArrayList(inventory);
             facilityInventory.putIfAbsent(Integer.valueOf(facilityId), inventoryDetails);
@@ -56,6 +56,13 @@ public class InventoryManager {
             throw new NullException("Facility Inventory Details");
         } else {
             return this.facilityInventory;
+        }
+    }
+    public List getDetails(Integer key) throws  NullException {
+        if(this.facilityInventory.isEmpty()) {
+            throw new NullException("Facility Inventory Details");
+        } else {
+            return this.facilityInventory.get(key);
         }
     }
 }

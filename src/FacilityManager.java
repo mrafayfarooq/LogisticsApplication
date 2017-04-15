@@ -9,7 +9,7 @@ import java.util.*;
  * Created by Muhammad Rafay on 4/9/17.
  */
 
-public class FacilityManager {
+public class FacilityManager implements LogisticManager {
     private HashMap<Integer, List<String>> facility = new HashMap<>();
     private List facilityDetails = new ArrayList<>();
     private String idTag;
@@ -23,7 +23,7 @@ public class FacilityManager {
         this.powerTag = powerTag;
         this.costTag = costTag;
     }
-    public void loadFacilitiesAndNetwork(NodeList facilities) {
+    public void load(NodeList facilities) {
         for (int i = 0; i < facilities.getLength(); i++) {
             if (facilities.item(i).getNodeType() == Node.TEXT_NODE) {
                 continue;
@@ -53,6 +53,13 @@ public class FacilityManager {
             throw new NullException("Facility Details");
         } else {
             return this.facility;
+        }
+    }
+    public List getDetails(Integer key) throws  NullException {
+        if(this.facility.isEmpty()) {
+            throw new NullException("Facility Details");
+        } else {
+            return this.facility.get(key);
         }
     }
 }

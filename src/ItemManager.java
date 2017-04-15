@@ -2,6 +2,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Muhammad Rafay on 4/11/17.
@@ -34,14 +35,19 @@ public class ItemManager {
             this.Item.put(itemId, price);
         }
     }
-    public HashMap<String, String> getItemDetails() throws NullException {
+    public HashMap<String, String> getItemDetails(int i) throws NullException {
         if(this.Item.isEmpty()) {
             throw new NullException("Item Details");
         } else {
             return this.Item;
         }
     }
-    //FacilityManager(String)
-    // public void loadFacilities(NodeList)
+    public String getItem(Integer key) throws  NullException {
+        if(this.Item.isEmpty()) {
+            throw new NullException("Item Details");
+        } else {
+            return this.Item.get(key);
+        }
+    }
 
 }
