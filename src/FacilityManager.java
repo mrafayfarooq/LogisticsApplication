@@ -10,18 +10,31 @@ import java.util.*;
  */
 
 public class FacilityManager implements LogisticManager {
-    private HashMap<Integer, List<String>> facility = new HashMap<>();
-    private List facilityDetails = new ArrayList<>();
-    private String idTag;
-    private String locationTag;
-    private String powerTag;
-    private String costTag;
+    private final HashMap<Integer, List<String>> facility = new HashMap<>();
+    private final HashMap<Integer, List<Integer>> scheduler = new HashMap<>();
+    private final String idTag;
+    private final String locationTag;
+    private final String powerTag;
+    private final String costTag;
 
-    FacilityManager(String idTag, String locationTag, String powerTag, String costTag) {
-        this.idTag = idTag;
-        this.locationTag = locationTag;
-        this.powerTag = powerTag;
-        this.costTag = costTag;
+    FacilityManager() {
+        this.idTag = "Id";
+        this.locationTag = "Location";
+        this.powerTag = "ProcessingPowerPerDay";
+        this.costTag = "Cost";
+    }
+    public void setScheduler() {
+        try {
+            for(int i=1;i<=18;i++) {
+                List<Integer> copies = Collections.nCopies(20, Integer.valueOf(getProcessingPower(i)));
+                scheduler.put(i, copies);
+            }
+        } catch (NullException e) {
+            e.printStackTrace();
+        }
+    }
+    public List getSchedule(Integer key) {
+        return scheduler.get(key);
     }
     public void load(NodeList facilities) {
         for (int i = 0; i < facilities.getLength(); i++) {
@@ -44,7 +57,7 @@ public class FacilityManager implements LogisticManager {
             String processingPowerPerDay = elem.getElementsByTagName(powerTag).item(0).getTextContent();
             String cost = elem.getElementsByTagName(costTag).item(0).getTextContent();
 
-            facilityDetails = Arrays.asList(location, processingPowerPerDay, cost);
+            List <String> facilityDetails = Arrays.asList(location, processingPowerPerDay, cost);
             facility.put(Integer.valueOf(facilityId), facilityDetails);
         }
     }
@@ -55,11 +68,19 @@ public class FacilityManager implements LogisticManager {
             return this.facility;
         }
     }
-    public List getDetails(Integer key) throws  NullException {
+    public List<String> getDetails(Integer key) throws  NullException {
         if(this.facility.isEmpty()) {
             throw new NullException("Facility Details");
         } else {
             return this.facility.get(key);
+        }
+    }
+    private String getProcessingPower(Integer key) throws NullException {
+        List <String> tempList = getDetails(key);
+        if(tempList.isEmpty()) {
+            throw new NullException("Facility Details");
+        } else {
+            return tempList.get(1).replace(" ", "");
         }
     }
 }

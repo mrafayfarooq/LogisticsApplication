@@ -1,15 +1,14 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.text.DecimalFormat;
-import java.util.Formatter;
+
 /**
  * Created by Muhammad Rafay on 4/12/17.
  */
-public class Output  {
+class Output  {
     private List listDetails = new ArrayList<>();
-    private DecimalFormat days = new DecimalFormat("#0.0");
-    private StringBuilder stringBuilder = new StringBuilder();
+    private final DecimalFormat daysFormatter = new DecimalFormat("#0.0");
+    private final DecimalFormat costFormatter = new DecimalFormat("$#,###");
+
 
     private void printFacilityDetails(LogisticManager logisticManager, Integer key) {
         try {
@@ -32,7 +31,7 @@ public class Output  {
                 String formattedLocation  = networkDetailsList.get(0).replaceAll("^ *", "");
                 String formattedDistance  = networkDetailsList.get(1).replaceAll(" ", "");
                 float distance = ((float)(Integer.valueOf(formattedDistance))/400);
-                System.out.printf(formattedLocation + "(" + days.format(distance) + "d); ");
+                System.out.printf(formattedLocation + "(" + daysFormatter.format(distance) + "d); ");
             }
             System.out.println("");
         } catch (NullException e) {
@@ -42,10 +41,9 @@ public class Output  {
     private void printFacilityInventory(LogisticManager logisticManager, Integer key) {
         try {
             listDetails = logisticManager.getDetails(key);
-            java.util.Collections.sort(listDetails);
+            Collections.sort(listDetails);
             System.out.println("Active Inventory:");
             Formatter formatter = new Formatter();
-          //  System.out.printf("  ");
             formatter.format("%-12s %-12s\n", "Item ID", "Quantity");
 
             for (Object list : listDetails) {
@@ -53,29 +51,56 @@ public class Output  {
                 String formattedQuantity  = inventoryDetails.get(1).replaceAll(" ", "");
                 String formattedItem  = inventoryDetails.get(0).replaceAll(" ", "");
                 formatter.format("%-12s %-12s\n", formattedItem, formattedQuantity);
-
-                //     System.out.printf(inventoryDetails.get(0));
-             //   System.out.println(inventoryDetails.get(1));
-           //     System.out.println(formatter.format("%,12d", Integer.valueOf(formattedQuantity)));
-                /*String networkDetails = list.toString().replaceAll("^ *","");
-                List<String> networkDetailsList = Arrays.asList(networkDetails.split("-"));
-                String formattedLocation  = networkDetailsList.get(0).replaceAll("^ *", "");
-                float distance = ((float)(Integer.valueOf(formattedDistance))/400);
-                System.out.printf(formattedLocation + "(" + days.format(distance) + "d); ");*/
             }
             System.out.println(formatter);
-                  // System.out.println("");
         } catch (NullException e) {
             e.printStackTrace();
         }
     }
-
-    public void printFacilityDetails(LogisticManager facility, LogisticManager network, LogisticManager inventory) throws NullException {
+    private void printDepletedInventory(LogisticManager inventoryManager, Integer key) {
+        List<String> depletedInventory = ((InventoryManager) inventoryManager).getDepletedInventory(key);
+        System.out.printf("Depleted (Used-Up) Inventory:");
+        if(depletedInventory.isEmpty()) {
+            System.out.println(" None");
+        } else {
+            System.out.println(depletedInventory.toString().replace("[","").replace("]",""));
+        }
+    }
+    private void printSceduleOfFacility(FacilityManager facility, Integer key) {
+        List<String> schedule = facility.getSchedule(key);
+        System.out.println("Schedule:");
+        System.out.format(String.format("%1s", "Day:"));
+        System.out.printf("      ");
+        for(int i = 1; i<=20; i++) {
+            System.out.format(String.format("%4s", String.valueOf(i)));
+        }
+        System.out.println();
+        System.out.format(String.format("%1s", "Available:"));
+        for (Object list : schedule) {
+            System.out.format(String.format("%4s",list.toString().replace("[","").replace(",","").replace("]","")));
+        }
+        System.out.println();
+    }
+    public void printFacilityDetails(LogisticManager facility, LogisticManager network, LogisticManager inventory) {
         for (int i = 1; i<=18; i++) {
             this.printFacilityDetails(facility,i);
+            System.out.println();
             this.printNetworkDetails(network, i);
+            System.out.println();
             this.printFacilityInventory(inventory,i);
+            this.printDepletedInventory(inventory, i);
+            System.out.println();
+            this.printSceduleOfFacility(((FacilityManager)facility), i);
+            System.out.println();
+
         }
+    }
+    public void printItemCatalog(ItemManager item) throws NullException {
+        TreeMap<String, String> Item = item.getItemDetails();
+        Item.forEach( (k,v) -> {
+            double cost = Double.parseDouble(v);
+            System.out.println(k.replace(" ", "") + ": " + String.format("%5s",costFormatter.format(cost)));
+        });
     }
 }
 

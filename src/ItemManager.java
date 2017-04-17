@@ -1,20 +1,18 @@
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import java.util.HashMap;
-import java.util.List;
-
+import java.util.TreeMap;
 /**
  * Created by Muhammad Rafay on 4/11/17.
  */
-public class ItemManager {
-    private HashMap<String, String> Item = new HashMap<>();
-    private String itemIdTag;
-    private String priceTag;
+class ItemManager {
+    private final TreeMap<String, String> Item = new TreeMap<>();
+    private final String itemIdTag;
+    private final String priceTag;
 
-    ItemManager(String itemIdTag, String priceTag) {
-        this.itemIdTag = itemIdTag;
-        this.priceTag = priceTag;
+    ItemManager() {
+        this.itemIdTag = "ItemID";
+        this.priceTag = "Price";
     }
     public void loadItems(NodeList Items) {
         for (int i = 0; i < Items.getLength(); i++) {
@@ -35,19 +33,11 @@ public class ItemManager {
             this.Item.put(itemId, price);
         }
     }
-    public HashMap<String, String> getItemDetails(int i) throws NullException {
+    public TreeMap<String, String> getItemDetails() throws NullException {
         if(this.Item.isEmpty()) {
             throw new NullException("Item Details");
         } else {
             return this.Item;
         }
     }
-    public String getItem(Integer key) throws  NullException {
-        if(this.Item.isEmpty()) {
-            throw new NullException("Item Details");
-        } else {
-            return this.Item.get(key);
-        }
-    }
-
 }

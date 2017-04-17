@@ -11,13 +11,12 @@ import java.util.List;
  * Created by Muhammad Rafay on 4/9/17.
  */
 public class NetworkManager implements LogisticManager {
-    private HashMap<Integer, List<String>> network = new HashMap<>();
-    private List networkDetails = new ArrayList<>();
-    private String locationTag;
-    private String distanceTag;
-    NetworkManager(String locationTag, String distanceTag) {
-        this.locationTag = locationTag;
-        this.distanceTag = distanceTag;
+    private final HashMap<Integer, List<String>> network = new HashMap<>();
+    private final String locationTag;
+    private final String distanceTag;
+    NetworkManager() {
+        this.locationTag = "Location";
+        this.distanceTag = "Distance";
     }
 
     public void load(NodeList networks) {
@@ -44,7 +43,7 @@ public class NetworkManager implements LogisticManager {
                 String distance = elem.getElementsByTagName(distanceTag).item(0).getTextContent();
                 networkLinks.add(location + "-" + distance);
             }
-            networkDetails =  new ArrayList(networkLinks);
+            List <String> networkDetails = new ArrayList(networkLinks);
             network.putIfAbsent(Integer.valueOf(facilityId), networkDetails);
 
         }
@@ -56,7 +55,7 @@ public class NetworkManager implements LogisticManager {
             return this.network;
         }
     }
-    public List getDetails(Integer key) throws NullException {
+    public List<String> getDetails(Integer key) throws NullException {
         if(this.network.isEmpty()) {
             throw new NullException("Network Details");
         } else {

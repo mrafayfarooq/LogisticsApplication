@@ -4,6 +4,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,18 +12,33 @@ import java.util.List;
  * Created by Muhammad Rafay on 4/11/17.
  */
 public class InventoryManager implements LogisticManager {
-    private HashMap<Integer, List<String>> facilityInventory = new HashMap<>();
-    private List inventoryDetails = new ArrayList<>();
-    private String facilityIdTag;
-    private String itemIdTag;
-    private String quantityTag;
+    private final HashMap<Integer, List<String>> facilityInventory = new HashMap<>();
+    private final String facilityIdTag;
+    private final String itemIdTag;
+    private final String quantityTag;
 
-    InventoryManager(String facilityIdTag, String itemIdTag, String quantityTag) {
-        this.facilityIdTag = facilityIdTag;
-        this.itemIdTag = itemIdTag;
-        this.quantityTag = quantityTag;
+    InventoryManager() {
+        this.facilityIdTag = "Id";
+        this.itemIdTag = "ItemID";
+        this.quantityTag = "Quantity";
     }
-
+    public List getDepletedInventory(Integer key) {
+        List depletedInventory = new ArrayList<>();
+        try {
+            List<String> listDetails = getDetails(key);
+            for (Object list : listDetails) {
+                String inventory = list.toString().replaceAll("^ *", "");
+                List<String> inventoryDetails = Arrays.asList(inventory.split(":"));
+                String formattedQuantity = inventoryDetails.get(1).replaceAll(" ","");
+                if (formattedQuantity.equals("0")) {
+                    depletedInventory.add(inventoryDetails.get(0));
+                }
+            }
+        } catch (NullException e) {
+            e.printStackTrace();
+        }
+        return depletedInventory;
+    }
     public void load(NodeList facilityInventoryDetails) {
         for (int i = 0; i < facilityInventoryDetails.getLength(); i++) {
             if (facilityInventoryDetails.item(i).getNodeType() == Node.TEXT_NODE) {
@@ -46,7 +62,7 @@ public class InventoryManager implements LogisticManager {
                 String quantity = elem.getElementsByTagName(quantityTag).item(0).getTextContent();
                 inventory.add(itemId + ":" + quantity);
             }
-            inventoryDetails =  new ArrayList(inventory);
+            List <String> inventoryDetails = new ArrayList<>(inventory);
             facilityInventory.putIfAbsent(Integer.valueOf(facilityId), inventoryDetails);
 
         }
@@ -58,7 +74,7 @@ public class InventoryManager implements LogisticManager {
             return this.facilityInventory;
         }
     }
-    public List getDetails(Integer key) throws  NullException {
+    public List<String> getDetails(Integer key) throws  NullException {
         if(this.facilityInventory.isEmpty()) {
             throw new NullException("Facility Inventory Details");
         } else {
