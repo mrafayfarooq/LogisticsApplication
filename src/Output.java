@@ -28,8 +28,8 @@ class Output  {
             for (Object list : listDetails) {
                 String networkDetails = list.toString().replaceAll("^ *","");
                 List<String> networkDetailsList = Arrays.asList(networkDetails.split("-"));
-                String formattedLocation  = networkDetailsList.get(0).replaceAll("^ *", "");
-                String formattedDistance  = networkDetailsList.get(1).replaceAll(" ", "");
+                String formattedLocation  = networkDetailsList.get(1).replaceAll("^ *", "");
+                String formattedDistance  = networkDetailsList.get(2).replaceAll(" ", "");
                 float distance = ((float)(Integer.valueOf(formattedDistance))/400);
                 System.out.printf(formattedLocation + "(" + daysFormatter.format(distance) + "d); ");
             }

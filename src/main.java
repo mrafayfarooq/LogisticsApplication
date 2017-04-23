@@ -21,6 +21,7 @@ class main {
             LogisticManager network  = LogisticFactory.getObject("Network");
             network.load(parsedFile);
 
+
             LogisticManager inventory = LogisticFactory.getObject("Inventory");
             parser.parseFileWithName(facilityInventory);
             parsedFile = parser.getXmlEntries();
@@ -38,10 +39,12 @@ class main {
 
             out.printItemCatalog(itemManager);
 
+            ShortestPathCalculator shortestPathCalculator = new ShortestPathCalculator((NetworkManager) network);
+       //     shortestPathCalculator.getGraph();
+
         } catch (NullException e) {
             e.printException();
         }
 
     }
 }
-

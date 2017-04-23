@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Muhammad Rafay on 4/9/17.
  */
 public class NetworkManager implements LogisticManager {
-    private final HashMap<Integer, List<String>> network = new HashMap<>();
+    protected final HashMap<Integer, List<String>> network = new HashMap<>();
     private final String locationTag;
     private final String distanceTag;
     NetworkManager() {
@@ -30,6 +30,7 @@ public class NetworkManager implements LogisticManager {
             String facilityId = aMap.getNamedItem("Id").getNodeValue();
 
             // Get Networks
+
             Element elem = (Element) networks.item(i);
             NodeList networkList = elem.getElementsByTagName("Facility");
             ArrayList<String> networkLinks = new ArrayList<>();
@@ -39,9 +40,11 @@ public class NetworkManager implements LogisticManager {
                     continue;
                 }
                 elem = (Element) networkList.item(j);
+                aMap = elem.getAttributes();
+                String networkId = aMap.getNamedItem("Id").getNodeValue();
                 String location = elem.getElementsByTagName(locationTag).item(0).getTextContent();
                 String distance = elem.getElementsByTagName(distanceTag).item(0).getTextContent();
-                networkLinks.add(location + "-" + distance);
+                networkLinks.add(networkId + "-" + location + "-" + distance);
             }
             List <String> networkDetails = new ArrayList(networkLinks);
             network.putIfAbsent(Integer.valueOf(facilityId), networkDetails);
