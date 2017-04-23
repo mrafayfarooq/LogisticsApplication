@@ -7,7 +7,10 @@ import java.text.DecimalFormat;
 class Output  {
     private List listDetails = new ArrayList<>();
     private final DecimalFormat daysFormatter = new DecimalFormat("#0.0");
+    private final DecimalFormat daysFormatterTwo = new DecimalFormat("#0.00");
+
     private final DecimalFormat costFormatter = new DecimalFormat("$#,###");
+    private final DecimalFormat distanceFormatter = new DecimalFormat("#,### mi");
 
 
     private void printFacilityDetails(LogisticManager logisticManager, Integer key) {
@@ -101,6 +104,28 @@ class Output  {
             double cost = Double.parseDouble(v);
             System.out.println(k.replace(" ", "") + ": " + String.format("%5s",costFormatter.format(cost)));
         });
+        System.out.println();
     }
+
+    public void printShortestPath(String source, String destination, FacilityManager facilityManager, ShortestPathCalculator shortestPathCalculator) {
+        Map<Integer, Map<Integer, List<Integer>>> shortestDistance = shortestPathCalculator.getShortestDistance();
+        Map<Integer, List<Integer>> pathDetails = (shortestDistance.get(facilityManager.getFacilityId(source)));
+        System.out.printf("%s to %s:\n • %s ", source, destination, source);
+        Integer distance = pathDetails.get(facilityManager.getFacilityId(destination)).get(0);
+        Integer s = pathDetails.get(facilityManager.getFacilityId(destination)).get(1);
+        pathDetails.get(facilityManager.getFacilityId(destination)).remove(distance);
+        pathDetails.get(facilityManager.getFacilityId(destination)).remove(s);
+
+        for (int values : pathDetails.get(facilityManager.getFacilityId(destination))) {
+            System.out.printf("->%s ", facilityManager.getFacilityString(values));
+        }
+        System.out.printf("= " + distanceFormatter.format(distance));
+        System.out.println("\n • " + distanceFormatter.format(distance) + " / " + "(8 hours per day * 50 mph) = " + daysFormatterTwo.format((float)distance/400) + " days \n");
+        //System.out.printf(":\t%s to %s:\n", source, destination);
+
+//        System.out.println(pathDetails.get(facilityManager.getFacilityId(destination)));
+
+    }
+
 }
 

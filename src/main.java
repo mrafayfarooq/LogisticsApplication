@@ -40,7 +40,20 @@ class main {
             out.printItemCatalog(itemManager);
 
             ShortestPathCalculator shortestPathCalculator = new ShortestPathCalculator((NetworkManager) network);
-       //     shortestPathCalculator.getGraph();
+            FacilityManager facilityManager = ((FacilityManager)facility);
+
+            out.printShortestPath("Santa Fe, NM", "Chicago, IL", facilityManager, shortestPathCalculator);
+            out.printShortestPath("Atlanta, GA", "St. Louis, MO", facilityManager, shortestPathCalculator);
+            out.printShortestPath("Seattle, WA", "Nashville, TN", facilityManager, shortestPathCalculator);
+            out.printShortestPath("New York City, NY", "Phoenix, AZ", facilityManager, shortestPathCalculator);
+            out.printShortestPath("Fargo, ND", "Austin, TX", facilityManager, shortestPathCalculator);
+            out.printShortestPath("Denver, CO", "Miami, FL", facilityManager, shortestPathCalculator);
+            out.printShortestPath("Austin, TX", "Norfolk, VA", facilityManager, shortestPathCalculator);
+            out.printShortestPath("Miami, FL", "Seattle, WA", facilityManager, shortestPathCalculator);
+            out.printShortestPath("Los Angeles, CA", "Chicago, IL", facilityManager, shortestPathCalculator);
+            out.printShortestPath("Detroit, MI", "Nashville, TN", facilityManager, shortestPathCalculator);
+
+
 
         } catch (NullException e) {
             e.printException();

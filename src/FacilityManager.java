@@ -12,6 +12,7 @@ import java.util.*;
 public class FacilityManager implements LogisticManager {
     private final HashMap<Integer, List<String>> facility = new HashMap<>();
     private final HashMap<Integer, List<Integer>> scheduler = new HashMap<>();
+    private final HashMap<String, Integer> facilityUtility = new HashMap<>();
     private final String idTag;
     private final String locationTag;
     private final String powerTag;
@@ -59,6 +60,7 @@ public class FacilityManager implements LogisticManager {
 
             List <String> facilityDetails = Arrays.asList(location, processingPowerPerDay, cost);
             facility.put(Integer.valueOf(facilityId), facilityDetails);
+            facilityUtility.put(location.replaceAll("(^ )|( $)", ""), Integer.valueOf(facilityId));
         }
     }
     public HashMap<Integer, List<String>> getFacilityDetails() throws NullException {
@@ -82,5 +84,11 @@ public class FacilityManager implements LogisticManager {
         } else {
             return tempList.get(1).replace(" ", "");
         }
+    }
+    public int getFacilityId(String facilityName) {
+        return facilityUtility.get(facilityName);
+    }
+    public String getFacilityString(Integer facilityId) {
+        return facility.get(facilityId).get(0);
     }
 }
