@@ -52,9 +52,7 @@ class main {
             out.printShortestPath("Miami, FL", "Seattle, WA", facilityManager, shortestPathCalculator);
             out.printShortestPath("Los Angeles, CA", "Chicago, IL", facilityManager, shortestPathCalculator);
             out.printShortestPath("Detroit, MI", "Nashville, TN", facilityManager, shortestPathCalculator);
-
-
-
+            
         } catch (NullException e) {
             e.printException();
         }
