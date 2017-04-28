@@ -3,8 +3,6 @@
  */
 
 import org.w3c.dom.NodeList;
-
-import java.util.HashMap;
 import java.util.List;
 
 interface Facility {

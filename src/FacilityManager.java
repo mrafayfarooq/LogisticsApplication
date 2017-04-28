@@ -10,10 +10,16 @@ import java.util.List;
 
 public class FacilityManager {
     private Facility facility;
-    FacilityManager(ParserContext parserContext) {
-        NodeList entries = parserContext.getEntries()[0];
-        this.facility = new FacilityImplmentation();
-        facility.loadFacility(entries);
+    private Network network;
+    FacilityManager(ParserContext parserContext) throws NullException {
+        if(parserContext == null) {
+            throw  new NullException("Parser Context");
+        } else {
+            NodeList facilityDetails = parserContext.getEntries()[0];
+            facility = new FacilityImplmentation();
+            facility.loadFacility(facilityDetails);
+            network = NetworkImplmentation.getInstance(facilityDetails);
+        }
     }
     List getScheduleOfFacility(String facilityName) throws NullException {
         return facility.getScheduleOfFacility(facilityName);
@@ -24,5 +30,7 @@ public class FacilityManager {
     List getDetails(String facilityName) throws NullException {
         return facility.getDetails(facilityName);
     }
-
+    List getNetwork(String facilityName) throws NullException {
+        return network.getNetwork(facilityName);
+    }
 }

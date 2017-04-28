@@ -55,14 +55,14 @@ public class FacilityImplmentation implements Facility {
         return this.facility.get(getFacilityId(facilityName));
     }
 
-    private int getFacilityId(String facilityName) throws NullException {
+    protected int getFacilityId(String facilityName) throws NullException {
         if (facilityUtility.get(facilityName) == null)
             throw new NullException("Facility Name");
         else {
             return facilityUtility.get(facilityName);
         }
     }
-    private String getFacilityString(Integer facilityId) {
+    protected String getFacilityString(Integer facilityId) {
         return facility.get(facilityId).get(0).trim();
     }
 

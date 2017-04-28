@@ -5,12 +5,12 @@ import org.w3c.dom.NodeList;
 class main {
     public static void main(String[] args) {
 
-       // try {
 
+        try {
             ParserContext parserContext = new ParserContext("XML");
             FacilityManager facilityManager = new FacilityManager(parserContext);
-        try {
-            System.out.println(facilityManager.getDetails("Seattle, WA"));
+
+            System.out.println(facilityManager.getNetwork("Seattle, WA"));
         } catch (NullException e) {
             e.printException();
         }

@@ -5,16 +5,18 @@ import org.w3c.dom.NodeList;
  */
 public class ParserContext {
     private Parser parser;
-    ParserContext(String fileType){
+    ParserContext(String fileType) throws NullException {
         switch (fileType) {
             case "XML":
-                this.parser = XMLParser.getInstance();
+                parser = XMLParser.getInstance();
+                parser.parse();
                 break;
-        }
-        this.parser.parse();
+            default:
+                throw new NullException(fileType);
+           }
     }
     public NodeList[] getEntries() {
-        return this.parser.getEntries();
+        return parser.getEntries();
     }
 }
 
