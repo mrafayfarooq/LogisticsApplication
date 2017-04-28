@@ -11,6 +11,10 @@ class main {
             FacilityManager facilityManager = new FacilityManager(parserContext);
 
             System.out.println(facilityManager.getNetworks("Seattle, WA"));
+            System.out.println(facilityManager.getDetails("Seattle, WA"));
+            System.out.println(facilityManager.getScheduleOfFacility("Seattle, WA"));
+
+
         } catch (NullException e) {
             e.printException();
         }

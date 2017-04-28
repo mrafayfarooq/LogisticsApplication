@@ -9,10 +9,10 @@ import java.util.*;
  * Created by Muhammad Rafay on 4/26/17.
  */
 public class FacilityImplmentation implements Facility {
-    private HashMap<Integer, List<String>> facility = new HashMap<>();
+    private HashMap<String, List<String>> facility = new HashMap<>();
+    private HashMap<Integer, List<String>> facilityUtility = new HashMap<>();
     private HashMap<Integer, List<Integer>> scheduler = new HashMap<>();
-    private HashMap<String, Integer> facilityUtility = new HashMap<>();
-    protected final HashMap<Integer, List<String>> network = new HashMap<>();
+    protected final HashMap<String, List<String>> network = new HashMap<>();
     private static FacilityImplmentation instance = null;
     private FacilityImplmentation(NodeList facilityDetails) {
         loadFacility(facilityDetails);
@@ -26,33 +26,37 @@ public class FacilityImplmentation implements Facility {
     }
 
     private void loadNetworks(NodeList networks) {
-        for (int i = 0; i < networks.getLength(); i++) {
-            if (networks.item(i).getNodeType() == Node.TEXT_NODE) {
-                continue;
-            }
-
-            // Get Facility Id
-            NamedNodeMap aMap = networks.item(i).getAttributes();
-            String facilityId = aMap.getNamedItem("Id").getNodeValue();
-
-            // Get Networks
-            Element elem = (Element) networks.item(i);
-            NodeList networkList = elem.getElementsByTagName("Facility");
-            ArrayList<String> networkLinks = new ArrayList<>();
-
-            for (int j = 0; j < networkList.getLength(); j++) {
-                if (networkList.item(j).getNodeType() == Node.TEXT_NODE) {
+        try {
+            for (int i = 0; i < networks.getLength(); i++) {
+                if (networks.item(i).getNodeType() == Node.TEXT_NODE) {
                     continue;
                 }
-                elem = (Element) networkList.item(j);
-                aMap = elem.getAttributes();
-                String networkId = aMap.getNamedItem("Id").getNodeValue();
-                String location = elem.getElementsByTagName("Location").item(0).getTextContent();
-                String distance = elem.getElementsByTagName("Distance").item(0).getTextContent();
-                networkLinks.add(networkId + "-" + location + "-" + distance);
+
+                // Get Facility Id
+                NamedNodeMap aMap = networks.item(i).getAttributes();
+                String facilityId = aMap.getNamedItem("Id").getNodeValue();
+
+                // Get Networks
+                Element elem = (Element) networks.item(i);
+                NodeList networkList = elem.getElementsByTagName("Facility");
+                ArrayList<String> networkLinks = new ArrayList<>();
+
+                for (int j = 0; j < networkList.getLength(); j++) {
+                    if (networkList.item(j).getNodeType() == Node.TEXT_NODE) {
+                        continue;
+                    }
+                    elem = (Element) networkList.item(j);
+                    aMap = elem.getAttributes();
+                    String networkId = aMap.getNamedItem("Id").getNodeValue();
+                    String location = elem.getElementsByTagName("Location").item(0).getTextContent();
+                    String distance = elem.getElementsByTagName("Distance").item(0).getTextContent();
+                    networkLinks.add(networkId + "-" + location + "-" + distance);
+                }
+                List<String> networkDetails = new ArrayList(networkLinks);
+                network.putIfAbsent(getFacilityString(Integer.valueOf(facilityId)), networkDetails);
             }
-            List <String> networkDetails = new ArrayList(networkLinks);
-            network.putIfAbsent(Integer.valueOf(facilityId), networkDetails);
+        } catch (NullException e) {
+                e.printStackTrace();
         }
     }
     private void loadFacility(NodeList facilities) {
@@ -76,9 +80,11 @@ public class FacilityImplmentation implements Facility {
             String processingPowerPerDay = elem.getElementsByTagName("ProcessingPowerPerDay").item(0).getTextContent();
             String cost = elem.getElementsByTagName("Cost").item(0).getTextContent();
 
-            List <String> facilityDetails = Arrays.asList(facilityId, location, processingPowerPerDay, cost);
-            facility.put(Integer.valueOf(facilityId), facilityDetails);
-            facilityUtility.put(location.replaceAll("(^ )|( $)", ""), Integer.valueOf(facilityId));
+            List <String> facilityDetails = Arrays.asList(facilityId, processingPowerPerDay, cost);
+            List <String> facilityDetailsUtility = Arrays.asList(location, processingPowerPerDay, cost);
+
+            facility.put(location.trim(), facilityDetails);
+            facilityUtility.put(Integer.valueOf(facilityId), facilityDetailsUtility);
         }
         this.setScheduler();
     }
@@ -87,37 +93,37 @@ public class FacilityImplmentation implements Facility {
         return scheduler.get(getFacilityId(facilityName));
     }
     public List<String> getDetails(String facilityName) throws NullException {
-        return this.facility.get(getFacilityId(facilityName));
+        return this.facility.get(facilityName);
     }
     public List<String> getNetworks(String facilityName) throws NullException {
         if(this.network.isEmpty()) {
             throw new NullException("Network Details");
         } else {
-            return this.network.get(getFacilityId(facilityName));
+            return this.network.get(facilityName);
         }
     }
     private int getProcessingPower(String facilityName) throws NullException {
-        return Integer.valueOf(getDetails(facilityName).get(2).trim());
+        return Integer.valueOf(facility.get(facilityName).get(1).trim());
     }
     private int getFacilityId(String facilityName) throws NullException {
-        if (facilityUtility.get(facilityName) == null)
+        if (facility.get(facilityName) == null)
             throw new NullException("Facility Name");
         else {
-            return facilityUtility.get(facilityName);
+            return Integer.valueOf(facility.get(facilityName).get(0).trim());
         }
     }
     private String getFacilityString(Integer facilityId) throws NullException {
         if(facilityId <= 0) {
             throw new NullException("Facility Id");
         } else {
-            return facility.get(facilityId).get(1).trim();
+            return facilityUtility.get(facilityId).get(0).toString().trim();
         }
     }
 
     private void setScheduler() {
         try {
             for(int i=1;i<=18;i++) {
-                List<Integer> copies = Collections.nCopies(20, getProcessingPower(getFacilityString(i)));
+                List<Integer> copies = Collections.nCopies(20, getProcessingPower(facilityUtility.get(i).get(0).toString().trim()));
                 scheduler.put(i, copies);
             }
         } catch (NullException e) {
