@@ -1,3 +1,4 @@
+/*
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -7,9 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+*/
 /**
  * Created by Muhammad Rafay on 4/9/17.
- */
+ *//*
+
 public class NetworkManager implements LogisticManager {
     protected final HashMap<Integer, List<String>> network = new HashMap<>();
     private final String locationTag;
@@ -67,3 +70,4 @@ public class NetworkManager implements LogisticManager {
     }
 
 }
+*/

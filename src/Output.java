@@ -1,9 +1,12 @@
+/*
 import java.util.*;
 import java.text.DecimalFormat;
 
+*/
 /**
  * Created by Muhammad Rafay on 4/12/17.
- */
+ *//*
+
 class Output  {
     private List listDetails = new ArrayList<>();
     private final DecimalFormat daysFormatter = new DecimalFormat("#0.0");
@@ -129,3 +132,4 @@ class Output  {
 
 }
 
+*/

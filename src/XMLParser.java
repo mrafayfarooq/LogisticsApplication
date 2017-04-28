@@ -4,42 +4,49 @@
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import org.w3c.dom.DOMException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import org.w3c.dom.DOMException;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.w3c.dom.NodeList;
 
 public class XMLParser implements Parser {
-    private NodeList xmlEntries;
-
-    @Override
-    public void parseFileWithName(String name) {
+    final String[] inputs = {"inputs/Facilities&Network.xml", "inputs/ItemCatalog.xml","inputs/FacilityInventory.xml"};
+    private NodeList[] xmlEntries = new NodeList[3];
+    private static XMLParser instance = null;
+    private XMLParser(){}
+    public static XMLParser getInstance(){
+        if(instance == null){
+            instance = new XMLParser();
+        }
+        return instance;
+    }
+    public void parse() {
         try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
+            for (int i=0;i< inputs.length; i++) {
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilder db = dbf.newDocumentBuilder();
 
-            File xml = new File(name);
-            if (!xml.exists()) {
-                System.err.println("**** XML File '" + name + "' cannot be found");
-                System.exit(-1);
+                File xml = new File(inputs[i]);
+                if (!xml.exists()) {
+                    System.err.println("**** XML File '" + inputs[i] + "' cannot be found");
+                    System.exit(-1);
+                }
+
+                Document doc = db.parse(xml);
+                doc.getDocumentElement().normalize();
+                this.xmlEntries[i] = doc.getDocumentElement().getChildNodes();
             }
-
-            Document doc = db.parse(xml);
-            doc.getDocumentElement().normalize();
-            this.xmlEntries = doc.getDocumentElement().getChildNodes();
-
-            } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
+        } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
             e.printStackTrace();
         }
     }
-    public NodeList getXmlEntries() throws NullException {
-        if (xmlEntries == null) {
-            throw new NullException("XML Entries");
-        } else {
-            return xmlEntries;
-        }
+    public NodeList[] getEntries() {
+        return xmlEntries;
     }
 }

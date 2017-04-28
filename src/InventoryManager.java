@@ -1,3 +1,4 @@
+/*
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -8,9 +9,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+*/
 /**
  * Created by Muhammad Rafay on 4/11/17.
- */
+ *//*
+
 public class InventoryManager implements LogisticManager {
     private final HashMap<Integer, List<String>> facilityInventory = new HashMap<>();
     private final String facilityIdTag;
@@ -83,3 +86,4 @@ public class InventoryManager implements LogisticManager {
     }
 }
 
+*/

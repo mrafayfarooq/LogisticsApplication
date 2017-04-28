@@ -1,6 +1,7 @@
 /**
  * Created by Muhammad Rafay on 4/14/17.
  */
+/*
 class LogisticFactory {
 
     public static LogisticManager getObject(String object) throws NullException {
@@ -15,3 +16,4 @@ class LogisticFactory {
         throw new NullException("Facility Inventory Details");
     }
 }
+*/

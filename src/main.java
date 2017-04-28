@@ -4,13 +4,18 @@ import org.w3c.dom.NodeList;
  */
 class main {
     public static void main(String[] args) {
-        String facilitiesAndNetworks = "inputs/Facilities&Network.xml";
-        String itemCatalog = "inputs/ItemCatalog.xml";
-        String facilityInventory = "inputs/FacilityInventory.xml";
 
-        XMLParser parser = new XMLParser();
+       // try {
+
+            ParserContext parserContext = new ParserContext("XML");
+            FacilityManager facilityManager = new FacilityManager(parserContext);
         try {
-            parser.parseFileWithName(facilitiesAndNetworks);
+            System.out.println(facilityManager.getDetails("Seattle, WA"));
+        } catch (NullException e) {
+            e.printException();
+        }
+
+         /*   parser.parseFileWithName(facilitiesAndNetworks);
             NodeList parsedFile = parser.getXmlEntries();
             Output out = new Output();
 
@@ -52,10 +57,10 @@ class main {
             out.printShortestPath("Miami, FL", "Seattle, WA", facilityManager, shortestPathCalculator);
             out.printShortestPath("Los Angeles, CA", "Chicago, IL", facilityManager, shortestPathCalculator);
             out.printShortestPath("Detroit, MI", "Nashville, TN", facilityManager, shortestPathCalculator);
-            
+
         } catch (NullException e) {
             e.printException();
         }
-
+    */
     }
 }
