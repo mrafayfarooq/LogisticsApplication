@@ -10,7 +10,7 @@ class main {
             ParserContext parserContext = new ParserContext("XML");
             FacilityManager facilityManager = new FacilityManager(parserContext);
 
-            System.out.println(facilityManager.getNetwork("Seattle, WA"));
+            System.out.println(facilityManager.getNetworks("Seattle, WA"));
         } catch (NullException e) {
             e.printException();
         }

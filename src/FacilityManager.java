@@ -10,27 +10,22 @@ import java.util.List;
 
 public class FacilityManager {
     private Facility facility;
-    private Network network;
     FacilityManager(ParserContext parserContext) throws NullException {
         if(parserContext == null) {
             throw  new NullException("Parser Context");
         } else {
             NodeList facilityDetails = parserContext.getEntries()[0];
-            facility = new FacilityImplmentation();
-            facility.loadFacility(facilityDetails);
-            network = NetworkImplmentation.getInstance(facilityDetails);
+            this.facility = FacilityImplmentation.getInstance(facilityDetails);
         }
     }
     List getScheduleOfFacility(String facilityName) throws NullException {
         return facility.getScheduleOfFacility(facilityName);
     }
-    int getProcessingPower(String facilityName) throws NullException {
-        return facility.getProcessingPower(facilityName);
-    }
     List getDetails(String facilityName) throws NullException {
-        return facility.getDetails(facilityName);
+        return this.facility.getDetails(facilityName);
     }
-    List getNetwork(String facilityName) throws NullException {
-        return network.getNetwork(facilityName);
+    List getNetworks(String facilityName) throws NullException {
+        return this.facility.getNetworks(facilityName);
     }
+
 }
