@@ -4,67 +4,25 @@ import org.w3c.dom.NodeList;
  */
 class main {
     public static void main(String[] args) {
-
-
         try {
             ParserContext parserContext = new ParserContext("XML");
             FacilityManager facilityManager = new FacilityManager(parserContext);
-
-            System.out.println(facilityManager.getNetworks("Seattle, WA"));
-            System.out.println(facilityManager.getDetails("Seattle, WA"));
-            System.out.println(facilityManager.getScheduleOfFacility("Seattle, WA"));
-
-
+            ItemManager.getInstance().loadItems(parserContext.getEntries()[1]);
+            Output output = new Output(facilityManager);
+            output.printFacilityDetails();
+            output.printItemCatalog();
+            output.printShortestPath("Santa Fe, NM", "Chicago, IL");
+            output.printShortestPath("Atlanta, GA", "St. Louis, MO");
+            output.printShortestPath("Seattle, WA", "Nashville, TN");
+            output.printShortestPath("New York City, NY", "Phoenix, AZ");
+            output.printShortestPath("Fargo, ND", "Austin, TX");
+            output.printShortestPath("Denver, CO", "Miami, FL");
+            output.printShortestPath("Austin, TX", "Norfolk, VA");
+            output.printShortestPath("Miami, FL", "Seattle, WA");
+            output.printShortestPath("Los Angeles, CA", "Chicago, IL");
+            output.printShortestPath("Detroit, MI", "Nashville, TN");
         } catch (NullException e) {
             e.printException();
         }
-
-         /*   parser.parseFileWithName(facilitiesAndNetworks);
-            NodeList parsedFile = parser.getXmlEntries();
-            Output out = new Output();
-
-            LogisticManager facility = LogisticFactory.getObject("Facility");
-            facility.load(parsedFile);
-            ((FacilityManager) facility).setScheduler();
-
-            LogisticManager network  = LogisticFactory.getObject("Network");
-            network.load(parsedFile);
-
-
-            LogisticManager inventory = LogisticFactory.getObject("Inventory");
-            parser.parseFileWithName(facilityInventory);
-            parsedFile = parser.getXmlEntries();
-            inventory.load(parsedFile);
-
-
-            out.printFacilityDetails(facility, network, inventory);
-
-
-
-            ItemManager itemManager = new ItemManager();
-            parser.parseFileWithName(itemCatalog);
-            parsedFile = parser.getXmlEntries();
-            itemManager.loadItems(parsedFile);
-
-            out.printItemCatalog(itemManager);
-
-            ShortestPathCalculator shortestPathCalculator = new ShortestPathCalculator((NetworkManager) network);
-            FacilityManager facilityManager = ((FacilityManager)facility);
-
-            out.printShortestPath("Santa Fe, NM", "Chicago, IL", facilityManager, shortestPathCalculator);
-            out.printShortestPath("Atlanta, GA", "St. Louis, MO", facilityManager, shortestPathCalculator);
-            out.printShortestPath("Seattle, WA", "Nashville, TN", facilityManager, shortestPathCalculator);
-            out.printShortestPath("New York City, NY", "Phoenix, AZ", facilityManager, shortestPathCalculator);
-            out.printShortestPath("Fargo, ND", "Austin, TX", facilityManager, shortestPathCalculator);
-            out.printShortestPath("Denver, CO", "Miami, FL", facilityManager, shortestPathCalculator);
-            out.printShortestPath("Austin, TX", "Norfolk, VA", facilityManager, shortestPathCalculator);
-            out.printShortestPath("Miami, FL", "Seattle, WA", facilityManager, shortestPathCalculator);
-            out.printShortestPath("Los Angeles, CA", "Chicago, IL", facilityManager, shortestPathCalculator);
-            out.printShortestPath("Detroit, MI", "Nashville, TN", facilityManager, shortestPathCalculator);
-
-        } catch (NullException e) {
-            e.printException();
-        }
-    */
     }
 }

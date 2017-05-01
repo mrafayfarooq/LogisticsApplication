@@ -6,13 +6,14 @@ import java.util.TreeMap;
  * Created by Muhammad Rafay on 4/11/17.
  */
 class ItemManager {
-    private final TreeMap<String, String> Item = new TreeMap<>();
-    private final String itemIdTag;
-    private final String priceTag;
-
-    ItemManager() {
-        this.itemIdTag = "ItemID";
-        this.priceTag = "Price";
+    private static final TreeMap<String, String> Item = new TreeMap<>();
+    private static ItemManager instance;
+    private ItemManager() {}
+    public static ItemManager getInstance() {
+        if(instance == null) {
+            instance = new ItemManager();
+        }
+        return instance;
     }
     public void loadItems(NodeList Items) {
         for (int i = 0; i < Items.getLength(); i++) {
@@ -27,17 +28,27 @@ class ItemManager {
             }
             // Get Attributes
             Element elem = (Element) Items.item(i);
-            String itemId = elem.getElementsByTagName(itemIdTag).item(0).getTextContent();
-            String price = elem.getElementsByTagName(priceTag).item(0).getTextContent();
+            String itemId = elem.getElementsByTagName("ItemID").item(0).getTextContent().trim();
+            String price = elem.getElementsByTagName("Price").item(0).getTextContent().trim();
 
-            this.Item.put(itemId, price);
+            Item.put(itemId, price);
         }
     }
     public TreeMap<String, String> getItemDetails() throws NullException {
-        if(this.Item.isEmpty()) {
+        if(Item.isEmpty()) {
             throw new NullException("Item Details");
         } else {
-            return this.Item;
+            return Item;
         }
     }
+
+    static int getCostOfItem(String itemName) throws NullException {
+        if(Item.get(itemName) == null) {
+            throw new NullException("Item Name"+ itemName);
+        } else {
+            return Integer.valueOf(Item.get(itemName));
+        }
+    }
+
+
 }

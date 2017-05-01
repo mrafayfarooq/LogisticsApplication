@@ -1,20 +1,29 @@
-/*
+
 import java.util.*;
 
-*/
+
 /**
  * Created by Muhammad Rafay on 4/22/17.
- *//*
+ */
 
-public class ShortestPathCalculator extends NetworkManager {
-    private int [][] netWorkGraph = new int [19][19];
+public class ShortestPathCalculator {
+    private int[][] netWorkGraph = new int[19][19];
     private List listDetails = new ArrayList<>();
     private List<Integer> paths = new ArrayList<>();
-    static final int V=18;
+    private static ShortestPathCalculator instance;
+    static final int V = 18;
     protected Map<Integer, Map<Integer, List<Integer>>> shortestDistance = new HashMap<>();
-    private Map<Integer,List<Integer>> shortestPaths = new HashMap<>();
+    private Map<Integer, List<Integer>> shortestPaths = new HashMap<>();
+    private static FacilityImplmentation facility;
 
-    ShortestPathCalculator(NetworkManager networkManager) {
+    public static ShortestPathCalculator getInstance(FacilityImplmentation facilityImplmentation) {
+        if (instance == null) {
+            instance = new ShortestPathCalculator(facilityImplmentation);
+            facility = facilityImplmentation;
+        }
+        return instance;
+    }
+    ShortestPathCalculator(FacilityImplmentation facilityImplmentation) {
         for(int i=1;i<=18;i++) {
             for(int j=1;j<=18;j++) {
                 this.netWorkGraph[i][j]= 0;
@@ -22,12 +31,11 @@ public class ShortestPathCalculator extends NetworkManager {
         }
         for(int i=1;i<=18;i++) {
             try {
-                listDetails = networkManager.getDetails(i);
+                listDetails = facilityImplmentation.getNetworks(facilityImplmentation.getFacilityString(i));
                 for (Object list : listDetails) {
-                    String networkDetails = list.toString().replaceAll("^ *","");
-                    List<String> networkDetailsList = Arrays.asList(networkDetails.split("-"));
-                    String networkId  = networkDetailsList.get(0);
-                    netWorkGraph[i][Integer.valueOf(networkId)] = Integer.valueOf(networkDetailsList.get(2).replaceAll(" ", ""));
+                    List<String> networkDetails= Arrays.asList(list.toString().split("-"));
+                    String networkId  = networkDetails.get(0);
+                    netWorkGraph[i][Integer.valueOf(networkId)] = Integer.valueOf(networkDetails.get(2).trim());
                   }
             } catch (NullException e) {
                 e.printStackTrace();
@@ -47,7 +55,6 @@ public class ShortestPathCalculator extends NetworkManager {
             return ;
         printPath(parent, parent[j],paths);
         paths.add(j);
-      //  System.out.printf(" %d ",j);
     }
 
     // A utility function to print the constructed distance // array
@@ -140,4 +147,3 @@ public class ShortestPathCalculator extends NetworkManager {
         return shortestDistance;
     }
 }
-*/

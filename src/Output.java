@@ -1,11 +1,12 @@
-/*
+
 import java.util.*;
 import java.text.DecimalFormat;
+import java.util.Formatter;
 
-*/
+
 /**
  * Created by Muhammad Rafay on 4/12/17.
- *//*
+ */
 
 class Output  {
     private List listDetails = new ArrayList<>();
@@ -14,41 +15,49 @@ class Output  {
 
     private final DecimalFormat costFormatter = new DecimalFormat("$#,###");
     private final DecimalFormat distanceFormatter = new DecimalFormat("#,### mi");
+    private final FacilityManager facilityManager;
 
+    Output(FacilityManager facilityManager) {
+        this.facilityManager = facilityManager;
+    }
 
-    private void printFacilityDetails(LogisticManager logisticManager, Integer key) {
-        try {
-            listDetails = logisticManager.getDetails(key);
-            System.out.println(listDetails.get(0).toString().replaceAll("^ *","").split(",")[0]);
-            System.out.println("Rate per Day:" + listDetails.get(1));
-            System.out.println("Cost per Day: $"+listDetails.get(2).toString().replace(" ",""));
-        } catch (NullException e) {
-            e.printStackTrace();
+    private void printFacilityDetails(String facilityName) throws NullException {
+        if (facilityManager.getDetails(facilityName).isEmpty()) {
+            throw new NullException("Facility " + facilityName);
+        } else {
+            listDetails = facilityManager.getDetails(facilityName);
+            System.out.println(facilityName.split(",")[0]);
+            for(int i=0;i<facilityName.split(",")[0].length();i++) {
+                System.out.printf("-");
+            }
+            System.out.println();
+            System.out.println("Rate per Day: " + listDetails.get(1));
+            System.out.println("Cost per Day: $" + listDetails.get(2));
         }
     }
-    private void printNetworkDetails(LogisticManager logisticManager, Integer key) {
-        try {
-            listDetails = logisticManager.getDetails(key);
+
+    private void printNetworkDetails(String facilityName) throws NullException {
+        if (facilityManager.getNetworks(facilityName).isEmpty()) {
+            throw new NullException("Facility " + facilityName);
+        } else {
+            listDetails = facilityManager.getNetworks(facilityName);
             java.util.Collections.sort(listDetails);
             System.out.println("Direct Links:");
             for (Object list : listDetails) {
-                String networkDetails = list.toString().replaceAll("^ *","");
-                List<String> networkDetailsList = Arrays.asList(networkDetails.split("-"));
-                String formattedLocation  = networkDetailsList.get(1).replaceAll("^ *", "");
-                String formattedDistance  = networkDetailsList.get(2).replaceAll(" ", "");
-                float distance = ((float)(Integer.valueOf(formattedDistance))/400);
-                System.out.printf(formattedLocation + "(" + daysFormatter.format(distance) + "d); ");
+                List<String> networkDetailsList = Arrays.asList(list.toString().split("-"));
+                String formattedLocation = networkDetailsList.get(1);
+                String formattedDistance = networkDetailsList.get(2);
+                float distance = ((float) (Integer.valueOf(formattedDistance)) / 400);
+                System.out.printf(formattedLocation + " (" + daysFormatter.format(distance) + "d); ");
             }
-            System.out.println("");
-        } catch (NullException e) {
-                e.printStackTrace();
         }
     }
-    private void printFacilityInventory(LogisticManager logisticManager, Integer key) {
-        try {
-            listDetails = logisticManager.getDetails(key);
-            Collections.sort(listDetails);
-            System.out.println("Active Inventory:");
+    private void printFacilityInventory(String  facilityName) throws NullException {
+        if(facilityManager.getInventory(facilityName).isEmpty()) {
+            throw new NullException("Facility " + facilityName);
+        } else {
+            listDetails = this.facilityManager.getInventory(facilityName);
+            System.out.println("\nActive Inventory:");
             Formatter formatter = new Formatter();
             formatter.format("%-12s %-12s\n", "Item ID", "Quantity");
 
@@ -59,12 +68,10 @@ class Output  {
                 formatter.format("%-12s %-12s\n", formattedItem, formattedQuantity);
             }
             System.out.println(formatter);
-        } catch (NullException e) {
-            e.printStackTrace();
         }
     }
-    private void printDepletedInventory(LogisticManager inventoryManager, Integer key) {
-        List<String> depletedInventory = ((InventoryManager) inventoryManager).getDepletedInventory(key);
+    private void printDepletedInventory(String facilityName) throws NullException {
+        List<String> depletedInventory = this.facilityManager.getDepletedInventory(facilityName);
         System.out.printf("Depleted (Used-Up) Inventory:");
         if(depletedInventory.isEmpty()) {
             System.out.println(" None");
@@ -72,8 +79,9 @@ class Output  {
             System.out.println(depletedInventory.toString().replace("[","").replace("]",""));
         }
     }
-    private void printSceduleOfFacility(FacilityManager facility, Integer key) {
-        List<String> schedule = facility.getSchedule(key);
+    private void printSceduleOfFacility(String facilityName) throws NullException {
+
+        List<String> schedule = this.facilityManager.getScheduleOfFacility(facilityName);
         System.out.println("Schedule:");
         System.out.format(String.format("%1s", "Day:"));
         System.out.printf("      ");
@@ -87,22 +95,22 @@ class Output  {
         }
         System.out.println();
     }
-    public void printFacilityDetails(LogisticManager facility, LogisticManager network, LogisticManager inventory) {
+    public void printFacilityDetails() throws NullException {
         for (int i = 1; i<=18; i++) {
-            this.printFacilityDetails(facility,i);
+            String facilityName = FacilityImplmentation.getFacilityString(i);
+            this.printFacilityDetails(facilityName);
             System.out.println();
-            this.printNetworkDetails(network, i);
+            this.printNetworkDetails(facilityName);
             System.out.println();
-            this.printFacilityInventory(inventory,i);
-            this.printDepletedInventory(inventory, i);
+            this.printFacilityInventory(facilityName);
+            this.printDepletedInventory(facilityName);
             System.out.println();
-            this.printSceduleOfFacility(((FacilityManager)facility), i);
+            this.printSceduleOfFacility(facilityName);
             System.out.println();
-
         }
     }
-    public void printItemCatalog(ItemManager item) throws NullException {
-        TreeMap<String, String> Item = item.getItemDetails();
+    public void printItemCatalog() throws NullException {
+        TreeMap<String, String> Item = ItemManager.getInstance().getItemDetails();
         Item.forEach( (k,v) -> {
             double cost = Double.parseDouble(v);
             System.out.println(k.replace(" ", "") + ": " + String.format("%5s",costFormatter.format(cost)));
@@ -110,26 +118,18 @@ class Output  {
         System.out.println();
     }
 
-    public void printShortestPath(String source, String destination, FacilityManager facilityManager, ShortestPathCalculator shortestPathCalculator) {
-        Map<Integer, Map<Integer, List<Integer>>> shortestDistance = shortestPathCalculator.getShortestDistance();
-        Map<Integer, List<Integer>> pathDetails = (shortestDistance.get(facilityManager.getFacilityId(source)));
+    public void printShortestPath(String source, String destination) throws NullException {
+        List paths = this.facilityManager.getShortestPath(source,destination);
+        int distance = (int) paths.get(paths.size()-1);
+        paths.remove(paths.size()-1);
         System.out.printf("%s to %s:\n • %s ", source, destination, source);
-        Integer distance = pathDetails.get(facilityManager.getFacilityId(destination)).get(0);
-        Integer s = pathDetails.get(facilityManager.getFacilityId(destination)).get(1);
-        pathDetails.get(facilityManager.getFacilityId(destination)).remove(distance);
-        pathDetails.get(facilityManager.getFacilityId(destination)).remove(s);
-
-        for (int values : pathDetails.get(facilityManager.getFacilityId(destination))) {
-            System.out.printf("->%s ", facilityManager.getFacilityString(values));
+        for (Object path : paths) {
+            System.out.printf("-> %s ", path);
         }
         System.out.printf("= " + distanceFormatter.format(distance));
         System.out.println("\n • " + distanceFormatter.format(distance) + " / " + "(8 hours per day * 50 mph) = " + daysFormatterTwo.format((float)distance/400) + " days \n");
-        //System.out.printf(":\t%s to %s:\n", source, destination);
-
-//        System.out.println(pathDetails.get(facilityManager.getFacilityId(destination)));
-
     }
 
 }
 
-*/
+

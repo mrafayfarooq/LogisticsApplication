@@ -4,27 +4,29 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.*;
+import java.text.DecimalFormat;
+
 
 /**
  * Created by Muhammad Rafay on 4/26/17.
  */
 public class FacilityImplmentation implements Facility {
-    private HashMap<String, List<String>> facility = new HashMap<>();
-    private HashMap<Integer, List<String>> facilityUtility = new HashMap<>();
+    protected final HashMap<String, List<String>> facility = new HashMap<>();
+    private static final HashMap<Integer, List<String>> facilityUtility = new HashMap<>();
     private HashMap<Integer, List<Integer>> scheduler = new HashMap<>();
-    protected final HashMap<String, List<String>> network = new HashMap<>();
-    private static FacilityImplmentation instance = null;
-    private FacilityImplmentation(NodeList facilityDetails) {
-        loadFacility(facilityDetails);
-        loadNetworks(facilityDetails);
-    }
-    public static FacilityImplmentation getInstance(NodeList facilityDetails){
-        if(instance == null){
-            instance = new FacilityImplmentation(facilityDetails);
-        }
-        return instance;
-    }
+    private final HashMap<String, List<String>> network = new HashMap<>();
+    private InventoryManager inventoryManager;
+    private ShortestPathCalculator shortestPathCalculator;
+    private final DecimalFormat distanceFormatter = new DecimalFormat("#,### mi");
+    private final DecimalFormat daysFormatterTwo = new DecimalFormat("#0.00");
 
+
+    FacilityImplmentation(NodeList[] facilityDetails) {
+        loadFacility(facilityDetails[0]);
+        loadNetworks(facilityDetails[0]);
+        inventoryManager = new InventoryManager(facilityDetails[2]);
+        shortestPathCalculator = ShortestPathCalculator.getInstance(this);
+    }
     private void loadNetworks(NodeList networks) {
         try {
             for (int i = 0; i < networks.getLength(); i++) {
@@ -47,9 +49,9 @@ public class FacilityImplmentation implements Facility {
                     }
                     elem = (Element) networkList.item(j);
                     aMap = elem.getAttributes();
-                    String networkId = aMap.getNamedItem("Id").getNodeValue();
-                    String location = elem.getElementsByTagName("Location").item(0).getTextContent();
-                    String distance = elem.getElementsByTagName("Distance").item(0).getTextContent();
+                    String networkId = aMap.getNamedItem("Id").getNodeValue().trim();
+                    String location = elem.getElementsByTagName("Location").item(0).getTextContent().trim();
+                    String distance = elem.getElementsByTagName("Distance").item(0).getTextContent().trim();
                     networkLinks.add(networkId + "-" + location + "-" + distance);
                 }
                 List<String> networkDetails = new ArrayList(networkLinks);
@@ -72,13 +74,13 @@ public class FacilityImplmentation implements Facility {
             }
             // Get Node Id
             NamedNodeMap aMap = facilities.item(i).getAttributes();
-            String facilityId = aMap.getNamedItem("Id").getNodeValue();
+            String facilityId = aMap.getNamedItem("Id").getNodeValue().trim();
 
             // Get Attributes
             Element elem = (Element) facilities.item(i);
-            String location = elem.getElementsByTagName("Location").item(0).getTextContent();
-            String processingPowerPerDay = elem.getElementsByTagName("ProcessingPowerPerDay").item(0).getTextContent();
-            String cost = elem.getElementsByTagName("Cost").item(0).getTextContent();
+            String location = elem.getElementsByTagName("Location").item(0).getTextContent().trim();
+            String processingPowerPerDay = elem.getElementsByTagName("ProcessingPowerPerDay").item(0).getTextContent().trim();
+            String cost = elem.getElementsByTagName("Cost").item(0).getTextContent().trim();
 
             List <String> facilityDetails = Arrays.asList(facilityId, processingPowerPerDay, cost);
             List <String> facilityDetailsUtility = Arrays.asList(location, processingPowerPerDay, cost);
@@ -97,26 +99,48 @@ public class FacilityImplmentation implements Facility {
     }
     public List<String> getNetworks(String facilityName) throws NullException {
         if(this.network.isEmpty()) {
-            throw new NullException("Network Details");
+            throw new NullException("Facility " + facilityName);
         } else {
             return this.network.get(facilityName);
         }
     }
+    public List<String> getInventory(String facilityName) throws NullException {
+        return inventoryManager.getDetails(facilityName);
+    }
+    public List<String> getDepletedInventory(String facilityName) throws NullException {
+        return inventoryManager.getDepletedInventory(facilityName);
+    }
+    public List getShortestPath(String source, String destination) throws NullException {
+        Map<Integer, Map<Integer, List<Integer>>> shortestDistance = shortestPathCalculator.getShortestDistance();
+        Map<Integer, List<Integer>> pathDetails = (shortestDistance.get(this.getFacilityId(source)));
+        Integer distance = pathDetails.get(this.getFacilityId(destination)).get(0);
+        Integer s = pathDetails.get(this.getFacilityId(destination)).get(1);
+        pathDetails.get(this.getFacilityId(destination)).remove(distance);
+        pathDetails.get(this.getFacilityId(destination)).remove(s);
+
+        List path = new ArrayList();
+        for (int values : pathDetails.get(this.getFacilityId(destination))) {
+            path.add(this.getFacilityString(values));
+        }
+        path.add(distance);
+        return path;
+    }
+
     private int getProcessingPower(String facilityName) throws NullException {
-        return Integer.valueOf(facility.get(facilityName).get(1).trim());
+        return Integer.valueOf(facility.get(facilityName).get(1));
     }
     private int getFacilityId(String facilityName) throws NullException {
         if (facility.get(facilityName) == null)
-            throw new NullException("Facility Name");
+            throw new NullException("Facility " + facilityName);
         else {
-            return Integer.valueOf(facility.get(facilityName).get(0).trim());
+            return Integer.valueOf(facility.get(facilityName).get(0));
         }
     }
-    private String getFacilityString(Integer facilityId) throws NullException {
+    public static String getFacilityString(Integer facilityId) throws NullException {
         if(facilityId <= 0) {
-            throw new NullException("Facility Id");
+            throw new NullException("Facility Id" + facilityId);
         } else {
-            return facilityUtility.get(facilityId).get(0).toString().trim();
+            return facilityUtility.get(facilityId).get(0);
         }
     }
 
