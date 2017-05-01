@@ -120,7 +120,7 @@ public class FacilityImplmentation implements Facility {
 
         List path = new ArrayList();
         for (int values : pathDetails.get(this.getFacilityId(destination))) {
-            path.add(this.getFacilityString(values));
+            path.add(getFacilityString(values));
         }
         path.add(distance);
         return path;

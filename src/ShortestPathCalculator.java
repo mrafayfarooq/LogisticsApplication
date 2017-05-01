@@ -31,7 +31,7 @@ public class ShortestPathCalculator {
         }
         for(int i=1;i<=18;i++) {
             try {
-                listDetails = facilityImplmentation.getNetworks(facilityImplmentation.getFacilityString(i));
+                listDetails = facilityImplmentation.getNetworks(FacilityImplmentation.getFacilityString(i));
                 for (Object list : listDetails) {
                     List<String> networkDetails= Arrays.asList(list.toString().split("-"));
                     String networkId  = networkDetails.get(0);
