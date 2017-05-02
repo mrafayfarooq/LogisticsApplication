@@ -4,17 +4,21 @@ import org.w3c.dom.NodeList;
 import java.util.TreeMap;
 /**
  * Created by Muhammad Rafay on 4/11/17.
+ *
+ * Class for managing Items
  */
 class ItemManager {
     private static final TreeMap<String, String> Item = new TreeMap<>();
     private static ItemManager instance;
     private ItemManager() {}
+    // Singelton Instance
     public static ItemManager getInstance() {
         if(instance == null) {
             instance = new ItemManager();
         }
         return instance;
     }
+    // Load Items
     public void loadItems(NodeList Items) {
         for (int i = 0; i < Items.getLength(); i++) {
             if (Items.item(i).getNodeType() == Node.TEXT_NODE) {
@@ -34,19 +38,17 @@ class ItemManager {
             Item.put(itemId, price);
         }
     }
+
+    /**+
+     * Get Item Details
+     * @return Map of every item with its Quantity
+     * @throws NullException if Item list is empty
+     */
     public TreeMap<String, String> getItemDetails() throws NullException {
         if(Item.isEmpty()) {
             throw new NullException("Item Details");
         } else {
             return Item;
-        }
-    }
-
-    static int getCostOfItem(String itemName) throws NullException {
-        if(Item.get(itemName) == null) {
-            throw new NullException("Item Name"+ itemName);
-        } else {
-            return Integer.valueOf(Item.get(itemName));
         }
     }
 

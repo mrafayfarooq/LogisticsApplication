@@ -1,12 +1,13 @@
 /**
  * Created by Muhammad Rafay on 4/8/17.
  */
+
 class main {
     public static void main(String[] args) {
         try {
             ParserContext parserContext = new ParserContext("XML");
             FacilityManager facilityManager = new FacilityManager(parserContext);
-            ItemManager.getInstance().loadItems(parserContext.getEntries()[1]);
+            ItemManager.getInstance().loadItems(parserContext.getEntries("ItemCatalog"));
             Output output = new Output(facilityManager);
             output.printFacilityDetails();
             output.printItemCatalog();

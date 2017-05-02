@@ -7,31 +7,27 @@ import java.util.*;
  */
 
 public class ShortestPathCalculator {
-    private int[][] netWorkGraph = new int[19][19];
-    private List listDetails = new ArrayList<>();
-    private List<Integer> paths = new ArrayList<>();
     private static ShortestPathCalculator instance;
-    static final int V = 18;
-    protected Map<Integer, Map<Integer, List<Integer>>> shortestDistance = new HashMap<>();
-    private Map<Integer, List<Integer>> shortestPaths = new HashMap<>();
-    private static FacilityImplmentation facility;
+    private static final int V = 18;
+    private final Map<Integer, Map<Integer, List<Integer>>> shortestDistance = new HashMap<>();
 
     public static ShortestPathCalculator getInstance(FacilityImplmentation facilityImplmentation) {
         if (instance == null) {
             instance = new ShortestPathCalculator(facilityImplmentation);
-            facility = facilityImplmentation;
+            FacilityImplmentation facility = facilityImplmentation;
         }
         return instance;
     }
-    ShortestPathCalculator(FacilityImplmentation facilityImplmentation) {
-        for(int i=1;i<=18;i++) {
+    private ShortestPathCalculator(FacilityImplmentation facilityImplmentation) {
+        int[][] netWorkGraph = new int[19][19];
+        for(int i = 1; i<=18; i++) {
             for(int j=1;j<=18;j++) {
-                this.netWorkGraph[i][j]= 0;
+                netWorkGraph[i][j]= 0;
             }
         }
         for(int i=1;i<=18;i++) {
             try {
-                listDetails = facilityImplmentation.getNetworks(FacilityImplmentation.getFacilityString(i));
+                List listDetails = facilityImplmentation.getNetworks(FacilityImplmentation.getFacilityString(i));
                 for (Object list : listDetails) {
                     List<String> networkDetails= Arrays.asList(list.toString().split("-"));
                     String networkId  = networkDetails.get(0);
@@ -48,7 +44,7 @@ public class ShortestPathCalculator {
     }
     // Function to print shortest path from source to j
 // using parent array
-    void printPath(int parent[], int j, List<Integer> paths)
+    private void printPath(int parent[], int j, List<Integer> paths)
     {
         // Base Case : If j is source
         if (parent[j]== -1)
@@ -58,7 +54,7 @@ public class ShortestPathCalculator {
     }
 
     // A utility function to print the constructed distance // array
-    int minDistance(int dist[], Boolean sptSet[])
+    private int minDistance(int dist[], Boolean sptSet[])
     {
         // Initialize min value
         int min = Integer.MAX_VALUE, min_index = -1;
@@ -74,27 +70,27 @@ public class ShortestPathCalculator {
     }
 
     // A utility function to print the constructed distance array
-    void printSolution(int[] dist, int src, int[] parent)
+    private void printSolution(int[] dist, int src, int[] parent)
     {
         //System.out.printf("\nVertex\t  Distance\tPath");
-        shortestPaths = new HashMap<>();
+        Map<Integer, List<Integer>> shortestPaths = new HashMap<>();
 
         for (int i = 1; i <= V; i++)
         {
-            paths = new ArrayList();
+            List<Integer> paths = new ArrayList();
 
        //     System.out.printf("\n%d -> %d \t\t %d\t ", src, i, dist[i]);
             paths.add(dist[i]);
-            printPath(parent,i,paths);
-            shortestPaths.put(i,paths);
+            printPath(parent,i, paths);
+            shortestPaths.put(i, paths);
         }
-        shortestDistance.put(src,shortestPaths);
+        shortestDistance.put(src, shortestPaths);
     }
 
     // Funtion that implements Dijkstra's single source shortest path
     // algorithm for a graph represented using adjacency matrix
     // representation
-    void dijkstra(int graph[][], int src)
+    private void dijkstra(int graph[][], int src)
     {
         int dist[] = new int[V+1]; // The output array. dist[i] will hold
         // the shortest distance from src to i
