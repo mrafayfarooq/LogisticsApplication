@@ -5,7 +5,8 @@
 import org.w3c.dom.NodeList;
 
 /**+
- * Parser Interface for parsing files
+ * Parser Interface for parsing files. This class provide role and behavior for any class wish to parse
+ * the input files.
  */
 interface Parser {
      /**+

@@ -7,22 +7,29 @@ import java.util.*;
 /**
  * Created by Muhammad Rafay on 4/26/17.
  *
- * FacilityImpl class which is implmenting Facility and composed of InventoryManager
- * and Shortest Path Calculator
+ * FacilityImpl class is implementing Facility and composed of InventoryManager
+ * and Shortest Path Calculator. The Constructor of this class takes list
+ * which contains parsed data necessary to make inventory object.
+ * All the "Facility" interface methods are implemented with addition to
+ * some utility methods needed to do the necessary calculation.
  */
-public class FacilityImplmentation implements Facility {
-    private final HashMap<String, List<String>> facility = new HashMap<>();
-    private static final HashMap<Integer, List<String>> facilityUtility = new HashMap<>();
-    private final HashMap<Integer, List<Integer>> scheduler = new HashMap<>();
-    private final HashMap<String, List<String>> network = new HashMap<>();
-    private final InventoryManager inventoryManager;
-    private final ShortestPathCalculator shortestPathCalculator;
+public class FacilityImplementation implements Facility {
+    private final HashMap<String, List<String>> facility = new HashMap<>(); // <FacilityName , ID - Processing Power - Cost>
+    private static final HashMap<Integer, List<String>> facilityUtility = new HashMap<>(); // Utility Hash Map for getting Facility Name from ID
+    private final HashMap<Integer, List<Integer>> scheduler = new HashMap<>(); // <FacilityName, List of first 20 da schedule>
+    private final HashMap<String, List<String>> network = new HashMap<>(); // <FacilityName, List of Facility connected>
+    private final InventoryManager inventoryManager; // Inventory Object for managing facility Inventory
+    private final ShortestPathCalculator shortestPathCalculator; // Object to calculate shortest path
 
     /**+
      * Constructor loading the facility and networks
      * @param facilityDetails facility details list
      */
-    FacilityImplmentation(NodeList facilityDetails[]) throws NullException {
+    FacilityImplementation(NodeList facilityDetails[]) throws NullException {
+        /**+
+         * We are loading the facility, network and making
+         * inventory and shortest path object.
+         */
         loadFacility(facilityDetails[0]);
         loadNetworks(facilityDetails[0]);
         inventoryManager = new InventoryManager(facilityDetails[1]);
@@ -55,13 +62,14 @@ public class FacilityImplmentation implements Facility {
                     }
                     elem = (Element) networkList.item(j);
                     aMap = elem.getAttributes();
+                    // Getting the ID, Location and Distance seperated by "-"
                     String networkId = aMap.getNamedItem("Id").getNodeValue().trim();
                     String location = elem.getElementsByTagName("Location").item(0).getTextContent().trim();
                     String distance = elem.getElementsByTagName("Distance").item(0).getTextContent().trim();
                     networkLinks.add(networkId + "-" + location + "-" + distance);
                 }
                 // Adding networkDetails into List
-                List<String> networkDetails = new ArrayList(networkLinks);
+                ArrayList<String> networkDetails = new ArrayList(networkLinks);
                 network.putIfAbsent(getFacilityString(Integer.valueOf(facilityId)), networkDetails);
             }
         } catch (NullException e) {
@@ -99,12 +107,12 @@ public class FacilityImplmentation implements Facility {
             facility.put(location.trim(), facilityDetails);
             facilityUtility.put(Integer.valueOf(facilityId), facilityDetailsUtility);
         }
-        // Setting the Scheduler
+        // Setting the Scheduler.
         this.setScheduler();
     }
 
     /**+
-     * Get Scedule of Facility
+     * Get Schedule of Facility
      * @param facilityName name of the facility
      * @return list of facility schedule
      * @throws NullException if the facility does not exist
@@ -149,7 +157,7 @@ public class FacilityImplmentation implements Facility {
      * @return list of facility schedule
      * @throws NullException if the facility does not exist
      */
-    public List<String> getDepletedInventory(String facilityName) throws NullException {
+    public List getDepletedInventory(String facilityName) throws NullException {
         return inventoryManager.getDepletedInventory(facilityName);
     }
 
@@ -193,6 +201,14 @@ public class FacilityImplmentation implements Facility {
             return Integer.valueOf(facility.get(facilityName).get(1));
         }
     }
+
+    /**+
+     * Get Facility ID if passed facility Name. This is utility function
+     * to easily parsed through facilities.
+     * @param facilityName
+     * @return facility id
+     * @throws NullException if facility doesnt exist
+     */
     private int getFacilityId(String facilityName) throws NullException {
         if (facility.get(facilityName) == null)
             throw new NullException("Facility " + facilityName);
@@ -200,6 +216,14 @@ public class FacilityImplmentation implements Facility {
             return Integer.valueOf(facility.get(facilityName).get(0));
         }
     }
+
+    /**+
+     * A static function which will get Facility String from facility ID. A utility function
+     * used by other classes.
+     * @param facilityId ID of the facility
+     * @return String the facility name
+     * @throws NullException if facility name does not exist
+     */
     public static String getFacilityString(Integer facilityId) throws NullException {
         if(facilityId <= 0) {
             throw new NullException("Facility Id" + facilityId);
@@ -207,8 +231,14 @@ public class FacilityImplmentation implements Facility {
             return facilityUtility.get(facilityId).get(0);
         }
     }
+
+    /**+
+     * This class will be modified in next phase. Right now we are making 20 copies,
+     * but eventually will be having schedule of more than that.
+     * @throws NullException
+     */
     private void setScheduler() throws NullException {
-        for(int i=1;i<=18;i++) {
+        for(int i=1;i<=facility.size();i++) {
             if(facilityUtility.get(i).isEmpty()) {
                 throw new NullException("Facility Name");
             } else {

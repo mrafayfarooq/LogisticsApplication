@@ -11,8 +11,12 @@ import java.util.List;
 /**
  * Created by Muhammad Rafay on 4/11/17.
  *
- * Class to Manage Inventory of the Facility
+ * This class Manages Inventory of the Facility.
+ * It has details of all the inventory of the facility with Item ID, and quantity.
+ *
+ * The constructor of this class takes raw inventory details and loads it into object.
  */
+
 
 class InventoryManager {
     private final HashMap<String, List<String>> facilityInventory = new HashMap<>();
@@ -38,7 +42,7 @@ class InventoryManager {
      */
     public List getDepletedInventory(String facilityName) throws NullException {
         List depletedInventory = new ArrayList<>();
-        List<String> listDetails = getDetails(facilityName);
+        List<String> listDetails = getDetails(facilityName); // Get details of the facility inventory which contains inventory name and quantity. Ex. ABCD:190
         for (Object list : listDetails) {
             List<String> inventoryDetails = Arrays.asList(list.toString().split(":"));
             String formattedQuantity = inventoryDetails.get(1);
@@ -74,6 +78,7 @@ class InventoryManager {
                     continue;
                 }
                 elem = (Element) inventoryList.item(j);
+                // Loading Inventory
                 String itemId = elem.getElementsByTagName(itemIdTag).item(0).getTextContent().trim();
                 String quantity = elem.getElementsByTagName(quantityTag).item(0).getTextContent().trim();
                 inventory.add(itemId + ":" + quantity);

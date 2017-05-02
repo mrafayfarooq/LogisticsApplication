@@ -96,7 +96,7 @@ class Output  {
     }
     public void printFacilityDetails() throws NullException {
         for (int i = 1; i<=18; i++) {
-            String facilityName = FacilityImplmentation.getFacilityString(i);
+            String facilityName = FacilityImplementation.getFacilityString(i);
             this.printFacilityDetails(facilityName);
             System.out.println();
             this.printNetworkDetails(facilityName);

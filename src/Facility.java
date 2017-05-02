@@ -1,9 +1,11 @@
 import java.util.List;
 
-/**
- * Created by Muhammad Rafay on 4/26/17.
+/**+
+ * The requirements of this interface is to provide a role every class
+ * which extend this, need to implement. This interface will provide public
+ * API to get all the necessary details needed to process an order from Facility.
  *
- * Facility Interface determining all the methods needed to be implmented by FacilityImpl
+ * If any bad data is passed, a NullException will be thrown.
  */
 interface Facility {
     List getScheduleOfFacility(String facilityName) throws NullException;

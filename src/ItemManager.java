@@ -5,7 +5,7 @@ import java.util.TreeMap;
 /**
  * Created by Muhammad Rafay on 4/11/17.
  *
- * Class for managing Items
+ * This class is managing the Items. It has details of Item and it's cost.
  */
 class ItemManager {
     private static final TreeMap<String, String> Item = new TreeMap<>();

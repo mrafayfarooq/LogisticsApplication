@@ -5,7 +5,10 @@ import org.w3c.dom.NodeList;
  */
 
 /**+
- * ParserContext - The context class for Parser
+ * ParserContext - The context class for Parser.
+ *
+ * This class takes a string in it's constructor and make a relevent object.
+ * The string is valid file extension/type of input file.
  */
 class ParserContext {
     private Parser parser;

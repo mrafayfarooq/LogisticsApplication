@@ -5,7 +5,11 @@ import java.util.List;
 /**
  * Created by Muhammad Rafay on 4/9/17.
  *
- * FacilityManager class implements Facility. This is facade interface implmenting Facility
+ * FacilityManager class implements Facility. This is facade implementing Facility interface.
+ * The constructor of this class takes a valid Parser Context which contains the details of
+ * the data loaded by the parses and load the object accordingly.
+ *
+ * The class throws Null Exception if parser context is null.
  */
 
 public class FacilityManager implements Facility {
@@ -21,7 +25,7 @@ public class FacilityManager implements Facility {
             throw  new NullException("Parser Context" + parserContext);
         } else {
             NodeList[] facilityDetails = { parserContext.getEntries("Facility&Network"), parserContext.getEntries("FacilityInventory") };
-            this.facility = new FacilityImplmentation(facilityDetails);
+            this.facility = new FacilityImplementation(facilityDetails);
         }
     }
     // Get Schedule of Facility
