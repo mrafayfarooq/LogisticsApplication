@@ -1,13 +1,13 @@
 import org.w3c.dom.NodeList;
 
-/**
- * Created by Muhammad Rafay on 4/26/17.
+/*
+  Created by Muhammad Rafay on 4/26/17.
  */
 
 /**+
  * ParserContext - The context class for Parser.
  *
- * This class takes a string in it's constructor and make a relevent object.
+ * This class takes a string in it's constructor and make a relevant object.
  * The string is valid file extension/type of input file.
  */
 class ParserContext {

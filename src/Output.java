@@ -96,6 +96,10 @@ class Output  {
     }
     public void printFacilityDetails() throws NullException {
         for (int i = 1; i<=18; i++) {
+            for(int j=0; j<60; j++) {
+                System.out.printf("-");
+            }
+            System.out.println();
             String facilityName = FacilityImplementation.getFacilityString(i);
             this.printFacilityDetails(facilityName);
             System.out.println();

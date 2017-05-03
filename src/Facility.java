@@ -7,6 +7,7 @@ import java.util.List;
  *
  * If any bad data is passed, a NullException will be thrown.
  */
+
 interface Facility {
     List getScheduleOfFacility(String facilityName) throws NullException;
     List getDetails(String facilityName) throws NullException;

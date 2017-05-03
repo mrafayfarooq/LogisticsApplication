@@ -26,9 +26,9 @@ public class FacilityImplementation implements Facility {
      * @param facilityDetails facility details list
      */
     FacilityImplementation(NodeList facilityDetails[]) throws NullException {
-        /**+
-         * We are loading the facility, network and making
-         * inventory and shortest path object.
+        /*+
+          We are loading the facility, network and making
+          inventory and shortest path object.
          */
         loadFacility(facilityDetails[0]);
         loadNetworks(facilityDetails[0]);
@@ -128,7 +128,11 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if the facility does not exist
      */
     public List<String> getDetails(String facilityName) throws NullException {
-        return this.facility.get(facilityName);
+        if(this.facility.get(facilityName) == null) {
+            throw new NullException("Details for Facility " + facilityName);
+        } else {
+            return this.facility.get(facilityName);
+        }
     }
 
     /**+
@@ -138,7 +142,11 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if the facility does not exist
      */
     public List<String> getNetworks(String facilityName) throws NullException {
-        return this.network.get(facilityName);
+        if(this.network.get(facilityName) == null) {
+            throw new NullException("Network for facility name " + facilityName);
+        } else {
+            return this.network.get(facilityName);
+        }
     }
 
     /**+
@@ -205,7 +213,7 @@ public class FacilityImplementation implements Facility {
     /**+
      * Get Facility ID if passed facility Name. This is utility function
      * to easily parsed through facilities.
-     * @param facilityName
+     * @param facilityName name of the facility
      * @return facility id
      * @throws NullException if facility doesnt exist
      */
@@ -226,7 +234,7 @@ public class FacilityImplementation implements Facility {
      */
     public static String getFacilityString(Integer facilityId) throws NullException {
         if(facilityId <= 0) {
-            throw new NullException("Facility Id" + facilityId);
+            throw new NullException("Facility Id " + facilityId);
         } else {
             return facilityUtility.get(facilityId).get(0);
         }
@@ -235,14 +243,14 @@ public class FacilityImplementation implements Facility {
     /**+
      * This class will be modified in next phase. Right now we are making 20 copies,
      * but eventually will be having schedule of more than that.
-     * @throws NullException
+     * @throws NullException if Schedule is not present
      */
     private void setScheduler() throws NullException {
         for(int i=1;i<=facility.size();i++) {
             if(facilityUtility.get(i).isEmpty()) {
                 throw new NullException("Facility Name");
             } else {
-                List<Integer> copies = Collections.nCopies(20, getProcessingPower(facilityUtility.get(i).get(0).toString().trim()));
+                List<Integer> copies = Collections.nCopies(20, getProcessingPower(facilityUtility.get(i).get(0).trim()));
                 scheduler.put(i, copies);
             }
         }

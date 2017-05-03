@@ -1,5 +1,4 @@
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -20,16 +19,14 @@ import java.util.List;
 
 class InventoryManager {
     private final HashMap<String, List<String>> facilityInventory = new HashMap<>();
-    private final String facilityIdTag;
     private final String itemIdTag;
     private final String quantityTag;
 
     /**+
      * Prepare and  Loads the inventory
-     * @param inventoryDetails
+     * @param inventoryDetails details of the inventory.
      */
     InventoryManager(NodeList inventoryDetails) {
-        this.facilityIdTag = "Id";
         this.itemIdTag = "ItemID";
         this.quantityTag = "Quantity";
         load(inventoryDetails);
@@ -62,9 +59,6 @@ class InventoryManager {
             if (facilityInventoryDetails.item(i).getNodeType() == Node.TEXT_NODE) {
                 continue;
             }
-            // Get Facility Id
-            NamedNodeMap aMap = facilityInventoryDetails.item(i).getAttributes();
-            String facilityId = aMap.getNamedItem(facilityIdTag).getNodeValue();
 
             // Get Inventory Details
             Element elem = (Element) facilityInventoryDetails.item(i);
@@ -95,8 +89,8 @@ class InventoryManager {
      * @throws NullException if facility name doesn't exist
      */
     public List<String> getDetails(String facilityName) throws  NullException {
-        if(this.facilityInventory.isEmpty()) {
-            throw new NullException("Facility Inventory Details of Facility Name"+ facilityName);
+        if(this.facilityInventory.get(facilityName) == null) {
+            throw new NullException("Inventory Details of Facility Name "+ facilityName);
         } else {
             return this.facilityInventory.get(facilityName);
         }

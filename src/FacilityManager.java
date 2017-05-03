@@ -22,7 +22,7 @@ public class FacilityManager implements Facility {
      */
     FacilityManager(ParserContext parserContext) throws NullException {
         if(parserContext == null) {
-            throw  new NullException("Parser Context" + parserContext);
+            throw  new NullException("Parser Context" + null);
         } else {
             NodeList[] facilityDetails = { parserContext.getEntries("Facility&Network"), parserContext.getEntries("FacilityInventory") };
             this.facility = new FacilityImplementation(facilityDetails);
