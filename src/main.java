@@ -27,6 +27,9 @@ class Main {
             output.printShortestPath("Los Angeles, CA", "Chicago, IL");
             output.printShortestPath("Detroit, MI", "Nashville, TN");
 
+            OrderManager orderManager = new  OrderManager(facilityManager, parserContext);
+            orderManager.processOrders();
+
         } catch (NullException e) {
             e.printException();
         }

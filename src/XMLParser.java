@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class XMLParser implements Parser {
     // input files
-    private final String[] inputs = {"inputs/Facilities&Network.xml", "inputs/ItemCatalog.xml","inputs/FacilityInventory.xml"};
+    private final String[] inputs = {"inputs/Facilities&Network.xml", "inputs/ItemCatalog.xml","inputs/FacilityInventory.xml", "inputs/Orders.xml"};
     private final NodeList[] xmlEntries = new NodeList[inputs.length];
     private static XMLParser instance = null;
     private XMLParser(){}
@@ -71,6 +71,8 @@ public class XMLParser implements Parser {
                 return xmlEntries[2];
             case "ItemCatalog":
                 return xmlEntries[1];
+            case "Orders":
+                return xmlEntries[3];
             default:
                 throw new NullException("File Name"+ fileName);
         }

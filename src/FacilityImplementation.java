@@ -241,6 +241,27 @@ public class FacilityImplementation implements Facility {
     }
 
     /**+
+     * Get the list of facilities with Item
+     * @param itemId id of the order
+     * @return list of facilties which has the item
+     */
+   public  List getFacilitiesWithItem(String itemId) throws NullException {
+       HashSet<String> facilities = new HashSet<>();
+       for(int i=1;i<facility.size();i++) {
+           List listDetails = this.getInventory(getFacilityString(i));
+           for (Object list : listDetails) {
+               List<String> inventoryDetails = Arrays.asList(list.toString().split(":"));
+               if(itemId.equals(inventoryDetails.get(0))) {
+                   facilities.add(getFacilityString(i));
+               }
+           }
+       }
+       List<String> list = new ArrayList<String>();
+       list.addAll(facilities);
+       return list;
+   }
+
+    /**+
      * This class will be modified in next phase. Right now we are making 20 copies,
      * but eventually will be having schedule of more than that.
      * @throws NullException if Schedule is not present

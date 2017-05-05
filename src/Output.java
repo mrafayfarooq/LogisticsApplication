@@ -11,7 +11,6 @@ class Output  {
     private List listDetails = new ArrayList<>();
     private final DecimalFormat daysFormatter = new DecimalFormat("#0.0");
     private final DecimalFormat daysFormatterTwo = new DecimalFormat("#0.00");
-
     private final DecimalFormat costFormatter = new DecimalFormat("$#,###");
     private final DecimalFormat distanceFormatter = new DecimalFormat("#,### mi");
     private final FacilityManager facilityManager;
@@ -62,8 +61,8 @@ class Output  {
 
             for (Object list : listDetails) {
                 List<String> inventoryDetails = Arrays.asList(list.toString().split(":"));
-                String formattedQuantity  = inventoryDetails.get(1).replaceAll(" ", "");
-                String formattedItem  = inventoryDetails.get(0).replaceAll(" ", "");
+                String formattedQuantity  = inventoryDetails.get(1);
+                String formattedItem  = inventoryDetails.get(0);
                 formatter.format("%-12s %-12s\n", formattedItem, formattedQuantity);
             }
             System.out.println(formatter);

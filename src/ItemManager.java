@@ -51,6 +51,12 @@ class ItemManager {
             return Item;
         }
     }
+    /**+
+     *
+     */
+    public Boolean checkItem(String orderID) {
+       return Item.get(orderID) == null ?  false :  true;
+    }
 
 
 }

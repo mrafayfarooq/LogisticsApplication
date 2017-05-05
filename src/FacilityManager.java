@@ -1,5 +1,7 @@
 
 import org.w3c.dom.NodeList;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,6 +53,10 @@ public class FacilityManager implements Facility {
     // Get Depleted Inventory
     public List getDepletedInventory(String  facilityName) throws NullException {
         return this.facility.getDepletedInventory(facilityName);
+    }
+    // Get List of Facilities with Order
+    public List getFacilitiesWithItem(String itemId) throws NullException {
+        return this.facility.getFacilitiesWithItem(itemId);
     }
 
 }

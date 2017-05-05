@@ -15,4 +15,5 @@ interface Facility {
     List getInventory(String facilityName) throws NullException;
     List getShortestPath(String source, String destination) throws NullException;
     List getDepletedInventory(String  facilityName) throws NullException;
+    List getFacilitiesWithItem(String itemId) throws NullException;
 }
