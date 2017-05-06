@@ -1,7 +1,4 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Muhammad Rafay on 5/3/17.
@@ -31,16 +28,26 @@ public class OrderManager {
                     String itemID = itemDetails.get(0).toString();
                     int quantity = Integer.parseInt(itemDetails.get(1).toString());
                     List facilitiesWithItem = facilityManager.getFacilitiesWithItem(itemID);
-                    System.out.println(itemID);
-                    System.out.println(facilitiesWithItem);
-                } else {
+                    System.out.println(this.findFacilitiesWithShortestPath(destination, facilitiesWithItem));
+                 } else {
                     System.out.println("Item does not exist");
                     return;
                 }
-
             }
             order.processOrder(entry.getValue());
-
         }
+    }
+    private Map<Double, String> findFacilitiesWithShortestPath(String destination, List facilitiesWithItem) throws NullException {
+        Map<Double,String> facilityWithShortestPath = new HashMap();
+        for (Object list : facilitiesWithItem) {
+            List path = facilityManager.getShortestPath(list.toString(), destination.split("-")[0]);
+            if(path!= null) {
+                int distance = (int) path.get(path.size()-1);
+                float days = (float)distance/400;
+                facilityWithShortestPath.put((double) days,list.toString());
+            }
+        }
+        Map<Double, String> sortedList = new TreeMap<Double, String>(facilityWithShortestPath);
+        return sortedList;
     }
 }

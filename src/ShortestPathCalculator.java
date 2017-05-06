@@ -14,7 +14,7 @@ import java.util.*;
 public class ShortestPathCalculator {
     private static ShortestPathCalculator instance;
     private static final int facilities = 18;
-    private final Map<Integer, Map<Integer, List<Integer>>> shortestDistance = new HashMap<>();  // Each facility ID is mapped into a Map which contains the ID of the destination and details of distance.
+    private final Map<Integer, Map<Integer, List<Integer>>> shortestDistance;  // Each facility ID is mapped into a Map which contains the ID of the destination and details of distance.
     public static ShortestPathCalculator getInstance(FacilityImplementation facilityImplementation) {
         // Get Singleton instance of Class
         if (instance == null) {
@@ -24,6 +24,7 @@ public class ShortestPathCalculator {
     }
     // Calculate Shortest Path
     private ShortestPathCalculator(FacilityImplementation facilityImplementation) {
+        shortestDistance = new HashMap<>();
         int[][] network = new int[facilities+1][facilities+1];
         // Initializing the network graph
         for(int i = 1; i<=facilities; i++) {

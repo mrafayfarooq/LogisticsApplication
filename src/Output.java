@@ -126,7 +126,9 @@ class Output  {
         paths.remove(paths.size()-1);
         System.out.printf("%s to %s:\n • %s ", source, destination, source);
         for (Object path : paths) {
-            System.out.printf("-> %s ", path);
+            if (!path.equals(source)) {
+                System.out.printf("-> %s ", path);
+            }
         }
         System.out.printf("= " + distanceFormatter.format(distance));
         System.out.println("\n • " + distanceFormatter.format(distance) + " / " + "(8 hours per day * 50 mph) = " + daysFormatterTwo.format((float)distance/400) + " days \n");

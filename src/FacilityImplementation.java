@@ -177,24 +177,26 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if source or destination does not found.
      */
     public List getShortestPath(String source, String destination) throws NullException {
-        // Get all Shortest Paths
-        Map<Integer, Map<Integer, List<Integer>>> shortestDistance = shortestPathCalculator.getShortestDistance();
-        // Get shortest path of source from all
-        Map<Integer, List<Integer>> pathDetails = (shortestDistance.get(this.getFacilityId(source)));
-        // Get distance
-        Integer distance = pathDetails.get(this.getFacilityId(destination)).get(0);
-        // Remove the source from the list
-        Integer s = pathDetails.get(this.getFacilityId(destination)).get(1);
-        pathDetails.get(this.getFacilityId(destination)).remove(distance);
-        pathDetails.get(this.getFacilityId(destination)).remove(s);
-
-        // Adding path into Path List
-        List path = new ArrayList();
-        for (int values : pathDetails.get(this.getFacilityId(destination))) {
-            path.add(getFacilityString(values));
+        if(!source.equals(destination)) {
+            // Get all Shortest Paths
+            Map<Integer, Map<Integer, List<Integer>>> shortestDistance = new HashMap<>(shortestPathCalculator.getShortestDistance());
+            // Get shortest path of source from all
+            Map<Integer, List<Integer>> pathDetails = new HashMap<>(shortestDistance.get(this.getFacilityId(source)));
+            // Get distance
+            Integer distance = pathDetails.get(this.getFacilityId(destination)).get(0);
+            // Adding path into Path List
+            List path = new ArrayList();
+            for (int values : pathDetails.get(this.getFacilityId(destination))) {
+                if (values <= 18) { //temperory bug fix
+                    path.add(getFacilityString(values));
+                }
+            }
+            path.add(distance);
+            pathDetails.clear();
+            return path;
+        } else {
+            return null;
         }
-        path.add(distance);
-        return path;
     }
 
     /**+
@@ -256,7 +258,7 @@ public class FacilityImplementation implements Facility {
                }
            }
        }
-       List<String> list = new ArrayList<String>();
+       List<String> list = new ArrayList<>();
        list.addAll(facilities);
        return list;
    }
