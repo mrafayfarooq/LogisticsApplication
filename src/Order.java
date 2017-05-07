@@ -6,5 +6,4 @@ import java.util.List;
  */
 public interface Order {
     HashMap getOrders();
-    void processOrder(List order);
 }

@@ -58,5 +58,7 @@ public class FacilityManager implements Facility {
     public List getFacilitiesWithItem(String itemId) throws NullException {
         return this.facility.getFacilitiesWithItem(itemId);
     }
-
+    public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
+         this.facility.reduceFacilityInventory(facilityName,itemId,quantity);
+    }
 }

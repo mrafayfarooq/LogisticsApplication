@@ -16,4 +16,5 @@ interface Facility {
     List getShortestPath(String source, String destination) throws NullException;
     List getDepletedInventory(String  facilityName) throws NullException;
     List getFacilitiesWithItem(String itemId) throws NullException;
+    void reduceFacilityInventory(String facilityName, String itemId, int quantity);
 }

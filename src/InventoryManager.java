@@ -18,7 +18,7 @@ import java.util.List;
 
 
 class InventoryManager {
-    private final HashMap<String, List<String>> facilityInventory = new HashMap<>();
+    private HashMap<String, List<String>> facilityInventory = new HashMap<>();
     private final String itemIdTag;
     private final String quantityTag;
 
@@ -94,6 +94,20 @@ class InventoryManager {
         } else {
             return this.facilityInventory.get(facilityName);
         }
+    }
+    public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
+        List facilityInventory = this.facilityInventory.get(facilityName);
+        int index = 0;
+        for(Object list: facilityInventory) {
+            index ++;
+            List<String> inventoryDetails = Arrays.asList(list.toString().split(":"));
+            if(inventoryDetails.get(0).equals(itemId)) {
+                Integer modifiedQuantity = Integer.parseInt(inventoryDetails.get(1)) - quantity;
+                String itemID = inventoryDetails.get(0);
+                this.facilityInventory.get(facilityName).set(index-1, itemID+":"+modifiedQuantity);
+            }
+        }
+
     }
 }
 

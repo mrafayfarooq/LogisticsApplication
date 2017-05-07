@@ -262,6 +262,9 @@ public class FacilityImplementation implements Facility {
        list.addAll(facilities);
        return list;
    }
+    public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
+       inventoryManager.reduceFacilityInventory(facilityName,itemId,quantity);
+    }
 
     /**+
      * This class will be modified in next phase. Right now we are making 20 copies,

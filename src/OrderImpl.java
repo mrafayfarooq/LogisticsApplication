@@ -64,7 +64,4 @@ public class OrderImpl implements Order {
         return orderDetail;
     }
 
-    public void processOrder(List order) {
-
-    }
 }
