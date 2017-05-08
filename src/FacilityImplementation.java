@@ -16,11 +16,10 @@ import java.util.*;
 public class FacilityImplementation implements Facility {
     private final HashMap<String, List<String>> facility = new HashMap<>(); // <FacilityName , ID - Processing Power - Cost>
     private static final HashMap<Integer, List<String>> facilityUtility = new HashMap<>(); // Utility Hash Map for getting Facility Name from ID
-    private final HashMap<Integer, List<Integer>> scheduler = new HashMap<>(); // <FacilityName, List of first 20 da schedule>
     private final HashMap<String, List<String>> network = new HashMap<>(); // <FacilityName, List of Facility connected>
     private final InventoryManager inventoryManager; // Inventory Object for managing facility Inventory
     private final ShortestPathCalculator shortestPathCalculator; // Object to calculate shortest path
-
+    private Scheduler scheduler;
     /**+
      * Constructor loading the facility and networks
      * @param facilityDetails facility details list
@@ -30,10 +29,12 @@ public class FacilityImplementation implements Facility {
           We are loading the facility, network and making
           inventory and shortest path object.
          */
+        scheduler =  new Scheduler(this);
         loadFacility(facilityDetails[0]);
         loadNetworks(facilityDetails[0]);
         inventoryManager = new InventoryManager(facilityDetails[1]);
         shortestPathCalculator = ShortestPathCalculator.getInstance(this);
+
     }
 
     /**+
@@ -108,7 +109,7 @@ public class FacilityImplementation implements Facility {
             facilityUtility.put(Integer.valueOf(facilityId), facilityDetailsUtility);
         }
         // Setting the Scheduler.
-        this.setScheduler();
+        this.setScheduler(facilityUtility);
     }
 
     /**+
@@ -118,7 +119,7 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if the facility does not exist
      */
     public List getScheduleOfFacility(String facilityName) throws NullException {
-        return scheduler.get(getFacilityId(facilityName));
+        return this.scheduler.getScheduleOfFacility(facilityName);
     }
 
     /**+
@@ -204,7 +205,7 @@ public class FacilityImplementation implements Facility {
      * @param facilityName name of the facility
      * @return processing power in integer
      */
-    private int getProcessingPower(String facilityName) throws NullException {
+    public int getProcessingPower(String facilityName) throws NullException {
         if (facility.get(facilityName) == null)
             throw new NullException("Facility " + facilityName);
         else {
@@ -219,7 +220,7 @@ public class FacilityImplementation implements Facility {
      * @return facility id
      * @throws NullException if facility doesnt exist
      */
-    private int getFacilityId(String facilityName) throws NullException {
+    public int getFacilityId(String facilityName) throws NullException {
         if (facility.get(facilityName) == null)
             throw new NullException("Facility " + facilityName);
         else {
@@ -270,15 +271,10 @@ public class FacilityImplementation implements Facility {
      * This class will be modified in next phase. Right now we are making 20 copies,
      * but eventually will be having schedule of more than that.
      * @throws NullException if Schedule is not present
+     * @param facilityUtility
      */
-    private void setScheduler() throws NullException {
-        for(int i=1;i<=facility.size();i++) {
-            if(facilityUtility.get(i).isEmpty()) {
-                throw new NullException("Facility Name");
-            } else {
-                List<Integer> copies = Collections.nCopies(20, getProcessingPower(facilityUtility.get(i).get(0).trim()));
-                scheduler.put(i, copies);
-            }
-        }
+    public void setScheduler(HashMap<Integer, List<String>> facilityUtility) throws NullException {
+        this.scheduler.setScheduler(FacilityImplementation.facilityUtility);
     }
+
 }

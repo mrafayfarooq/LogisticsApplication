@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.List;
 
 /**+
@@ -17,4 +18,5 @@ interface Facility {
     List getDepletedInventory(String  facilityName) throws NullException;
     List getFacilitiesWithItem(String itemId) throws NullException;
     void reduceFacilityInventory(String facilityName, String itemId, int quantity);
+    void setScheduler(HashMap<Integer, List<String>> facilityUtility) throws NullException;
 }

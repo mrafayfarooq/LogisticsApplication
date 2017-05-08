@@ -1,7 +1,7 @@
 
 import org.w3c.dom.NodeList;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -61,4 +61,8 @@ public class FacilityManager implements Facility {
     public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
          this.facility.reduceFacilityInventory(facilityName,itemId,quantity);
     }
+    public void setScheduler(HashMap<Integer, List<String>> facilityUtility) throws NullException {
+       this.facility.setScheduler(facilityUtility);
+    }
+
 }
