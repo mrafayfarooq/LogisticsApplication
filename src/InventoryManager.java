@@ -109,5 +109,15 @@ class InventoryManager {
         }
 
     }
+    public int getQuantityOfItem(String facilityName, List itemDetails) throws NullException {
+        List inventoryDetails = this.getDetails(facilityName);
+        for(Object list : inventoryDetails) {
+            List<String> inventory = Arrays.asList(list.toString().split(":"));
+            if (inventory.get(0).equals(itemDetails.get(0).toString())) {
+                return Integer.parseInt(inventory.get(1));
+            }
+        }
+        return 0;
+    }
 }
 

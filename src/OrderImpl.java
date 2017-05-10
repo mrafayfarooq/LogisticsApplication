@@ -4,14 +4,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Created by Muhammad Rafay on 5/3/17.
  */
 public class OrderImpl implements Order {
-    private final HashMap<String, List<String>> orderDetail = new HashMap<>();
+    private final TreeMap<String, List<String>> orderDetail = new TreeMap<>();
 
     OrderImpl(NodeList orderDetails) {
         loadOrder(orderDetails);
@@ -60,7 +60,7 @@ public class OrderImpl implements Order {
      * Get all the orders
      * @return HashMap of the orders
      */
-    public HashMap getOrders() {
+    public TreeMap<String, List<String>> getOrders() {
         return orderDetail;
     }
 

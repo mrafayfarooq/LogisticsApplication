@@ -54,8 +54,12 @@ class ItemManager {
     /**+
      *
      */
-    public Boolean checkItem(String orderID) {
-       return Item.get(orderID) == null ?  false :  true;
+    public Boolean checkItem(String itemID) {
+       return Item.get(itemID) == null ?  false :  true;
+    }
+
+    public int getItemCost(String itemID) {
+        return Integer.parseInt(Item.get(itemID));
     }
 
 

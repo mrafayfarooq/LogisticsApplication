@@ -1,5 +1,5 @@
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**+
  * The requirements of this interface is to provide a role every class
@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 interface Facility {
-    List getScheduleOfFacility(String facilityName) throws NullException;
+    Map getScheduleOfFacility(String facilityName) throws NullException;
     List getDetails(String facilityName) throws NullException;
     List getNetworks(String facilityName) throws NullException;
     List getInventory(String facilityName) throws NullException;
@@ -18,5 +18,7 @@ interface Facility {
     List getDepletedInventory(String  facilityName) throws NullException;
     List getFacilitiesWithItem(String itemId) throws NullException;
     void reduceFacilityInventory(String facilityName, String itemId, int quantity);
-    void setScheduler(HashMap<Integer, List<String>> facilityUtility) throws NullException;
-}
+    int findArrivalDay(int startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException;
+    public int setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException;
+
+    }

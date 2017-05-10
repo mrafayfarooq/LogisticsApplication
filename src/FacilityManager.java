@@ -3,6 +3,7 @@ import org.w3c.dom.NodeList;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Muhammad Rafay on 4/9/17.
@@ -17,52 +18,65 @@ import java.util.List;
 public class FacilityManager implements Facility {
     private Facility facility;
 
-    /**+
+    /**
+     * +
      * Constructor taking Parser Context
+     *
      * @param parserContext Context for parser. Can be XML, JSON etc
      * @throws NullException if invalid extension is passed
      */
     FacilityManager(ParserContext parserContext) throws NullException {
-        if(parserContext == null) {
-            throw  new NullException("Parser Context" + null);
+        if (parserContext == null) {
+            throw new NullException("Parser Context" + null);
         } else {
-            NodeList[] facilityDetails = { parserContext.getEntries("Facility&Network"), parserContext.getEntries("FacilityInventory") };
+            NodeList[] facilityDetails = {parserContext.getEntries("Facility&Network"), parserContext.getEntries("FacilityInventory")};
             this.facility = new FacilityImplementation(facilityDetails);
         }
     }
+
     // Get Schedule of Facility
-    public List getScheduleOfFacility(String facilityName) throws NullException {
+    public Map getScheduleOfFacility(String facilityName) throws NullException {
         return facility.getScheduleOfFacility(facilityName);
     }
+
     // Get Details fo Facility
     public List getDetails(String facilityName) throws NullException {
         return this.facility.getDetails(facilityName);
     }
+
     // Get Facility Networks
     public List getNetworks(String facilityName) throws NullException {
         return this.facility.getNetworks(facilityName);
     }
+
     // Get Inventory for the Facility
     public List getInventory(String facilityName) throws NullException {
         return this.facility.getInventory(facilityName);
     }
+
     // Get Shortest Path from two facility
     public List getShortestPath(String source, String destination) throws NullException {
-         return this.facility.getShortestPath(source,destination);
+        return this.facility.getShortestPath(source, destination);
     }
+
     // Get Depleted Inventory
-    public List getDepletedInventory(String  facilityName) throws NullException {
+    public List getDepletedInventory(String facilityName) throws NullException {
         return this.facility.getDepletedInventory(facilityName);
     }
+
     // Get List of Facilities with Order
     public List getFacilitiesWithItem(String itemId) throws NullException {
         return this.facility.getFacilitiesWithItem(itemId);
     }
+
     public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
-         this.facility.reduceFacilityInventory(facilityName,itemId,quantity);
-    }
-    public void setScheduler(HashMap<Integer, List<String>> facilityUtility) throws NullException {
-       this.facility.setScheduler(facilityUtility);
+        this.facility.reduceFacilityInventory(facilityName, itemId, quantity);
     }
 
+    public int findArrivalDay(int startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException {
+        return this.facility.findArrivalDay(startDay, qunatityToProcess, facilityName, itemDetail);
+    }
+    public int setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
+        return this.facility.setSchedule(startDay,qunatityToProcess,facilityName,itemDetails);
+    }
 }

@@ -79,7 +79,7 @@ class Output  {
     }
     private void printSceduleOfFacility(String facilityName) throws NullException {
 
-        List<String> schedule = this.facilityManager.getScheduleOfFacility(facilityName);
+        Map<Integer, Integer> schedule = this.facilityManager.getScheduleOfFacility(facilityName);
         System.out.println("Schedule:");
         System.out.format(String.format("%1s", "Day:"));
         System.out.printf("      ");
@@ -88,9 +88,10 @@ class Output  {
         }
         System.out.println();
         System.out.format(String.format("%1s", "Available:"));
-        for (Object list : schedule) {
-            System.out.format(String.format("%4s",list.toString().replace("[","").replace(",","").replace("]","")));
-        }
+
+        schedule.forEach( (k,v) -> {
+            System.out.format(String.format("%4s",v));
+        });
         System.out.println();
     }
     public void printFacilityDetails() throws NullException {

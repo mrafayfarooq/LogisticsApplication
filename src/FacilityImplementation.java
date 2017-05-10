@@ -20,8 +20,11 @@ public class FacilityImplementation implements Facility {
     private final InventoryManager inventoryManager; // Inventory Object for managing facility Inventory
     private final ShortestPathCalculator shortestPathCalculator; // Object to calculate shortest path
     private Scheduler scheduler;
-    /**+
+
+    /**
+     * +
      * Constructor loading the facility and networks
+     *
      * @param facilityDetails facility details list
      */
     FacilityImplementation(NodeList facilityDetails[]) throws NullException {
@@ -29,7 +32,7 @@ public class FacilityImplementation implements Facility {
           We are loading the facility, network and making
           inventory and shortest path object.
          */
-        scheduler =  new Scheduler(this);
+        scheduler = new Scheduler(this);
         loadFacility(facilityDetails[0]);
         loadNetworks(facilityDetails[0]);
         inventoryManager = new InventoryManager(facilityDetails[1]);
@@ -37,8 +40,10 @@ public class FacilityImplementation implements Facility {
 
     }
 
-    /**+
+    /**
+     * +
      * Loading the Network
+     *
      * @param networks NodeList
      */
     private void loadNetworks(NodeList networks) {
@@ -78,8 +83,10 @@ public class FacilityImplementation implements Facility {
         }
     }
 
-    /**+
+    /**
+     * +
      * Load Facility Details
+     *
      * @param facilities Nodelist of facility details
      */
     private void loadFacility(NodeList facilities) throws NullException {
@@ -102,8 +109,8 @@ public class FacilityImplementation implements Facility {
             String processingPowerPerDay = elem.getElementsByTagName("ProcessingPowerPerDay").item(0).getTextContent().trim();
             String cost = elem.getElementsByTagName("Cost").item(0).getTextContent().trim();
 
-            List <String> facilityDetails = Arrays.asList(facilityId, processingPowerPerDay, cost);
-            List <String> facilityDetailsUtility = Arrays.asList(location, processingPowerPerDay, cost);
+            List<String> facilityDetails = Arrays.asList(facilityId, processingPowerPerDay, cost);
+            List<String> facilityDetailsUtility = Arrays.asList(location, processingPowerPerDay, cost);
 
             facility.put(location.trim(), facilityDetails);
             facilityUtility.put(Integer.valueOf(facilityId), facilityDetailsUtility);
@@ -112,46 +119,54 @@ public class FacilityImplementation implements Facility {
         this.setScheduler(facilityUtility);
     }
 
-    /**+
+    /**
+     * +
      * Get Schedule of Facility
+     *
      * @param facilityName name of the facility
      * @return list of facility schedule
      * @throws NullException if the facility does not exist
      */
-    public List getScheduleOfFacility(String facilityName) throws NullException {
+    public Map<Integer, Integer> getScheduleOfFacility(String facilityName) throws NullException {
         return this.scheduler.getScheduleOfFacility(facilityName);
     }
 
-    /**+
+    /**
+     * +
      * Get Details of Facility
+     *
      * @param facilityName name of the facility
      * @return list of facility schedule
      * @throws NullException if the facility does not exist
      */
     public List<String> getDetails(String facilityName) throws NullException {
-        if(this.facility.get(facilityName) == null) {
+        if (this.facility.get(facilityName) == null) {
             throw new NullException("Details for Facility " + facilityName);
         } else {
             return this.facility.get(facilityName);
         }
     }
 
-    /**+
+    /**
+     * +
      * Get Network of Facility
+     *
      * @param facilityName name of the facility
      * @return list of facility schedule
      * @throws NullException if the facility does not exist
      */
     public List<String> getNetworks(String facilityName) throws NullException {
-        if(this.network.get(facilityName) == null) {
+        if (this.network.get(facilityName) == null) {
             throw new NullException("Network for facility name " + facilityName);
         } else {
             return this.network.get(facilityName);
         }
     }
 
-    /**+
+    /**
+     * +
      * Get Inventory of Facility
+     *
      * @param facilityName name of the facility
      * @return list of facility schedule
      * @throws NullException if the facility does not exist
@@ -160,8 +175,10 @@ public class FacilityImplementation implements Facility {
         return inventoryManager.getDetails(facilityName);
     }
 
-    /**+
+    /**
+     * +
      * Get Depleted Inventory of Facility
+     *
      * @param facilityName name of the facility
      * @return list of facility schedule
      * @throws NullException if the facility does not exist
@@ -170,15 +187,17 @@ public class FacilityImplementation implements Facility {
         return inventoryManager.getDepletedInventory(facilityName);
     }
 
-    /**+
+    /**
+     * +
      * Get Shortest Path between Source and Destination
-     * @param source facility name
+     *
+     * @param source      facility name
      * @param destination facility name
      * @return List of facility with shortest cost
      * @throws NullException if source or destination does not found.
      */
     public List getShortestPath(String source, String destination) throws NullException {
-        if(!source.equals(destination)) {
+        if (!source.equals(destination)) {
             // Get all Shortest Paths
             Map<Integer, Map<Integer, List<Integer>>> shortestDistance = new HashMap<>(shortestPathCalculator.getShortestDistance());
             // Get shortest path of source from all
@@ -200,8 +219,10 @@ public class FacilityImplementation implements Facility {
         }
     }
 
-    /**+
+    /**
+     * +
      * Get Processing Power of Facility
+     *
      * @param facilityName name of the facility
      * @return processing power in integer
      */
@@ -213,9 +234,11 @@ public class FacilityImplementation implements Facility {
         }
     }
 
-    /**+
+    /**
+     * +
      * Get Facility ID if passed facility Name. This is utility function
      * to easily parsed through facilities.
+     *
      * @param facilityName name of the facility
      * @return facility id
      * @throws NullException if facility doesnt exist
@@ -228,53 +251,71 @@ public class FacilityImplementation implements Facility {
         }
     }
 
-    /**+
+    /**
+     * +
      * A static function which will get Facility String from facility ID. A utility function
      * used by other classes.
+     *
      * @param facilityId ID of the facility
      * @return String the facility name
      * @throws NullException if facility name does not exist
      */
     public static String getFacilityString(Integer facilityId) throws NullException {
-        if(facilityId <= 0) {
+        if (facilityId <= 0) {
             throw new NullException("Facility Id " + facilityId);
         } else {
             return facilityUtility.get(facilityId).get(0);
         }
     }
 
-    /**+
+    /**
+     * +
      * Get the list of facilities with Item
+     *
      * @param itemId id of the order
      * @return list of facilties which has the item
      */
-   public  List getFacilitiesWithItem(String itemId) throws NullException {
-       HashSet<String> facilities = new HashSet<>();
-       for(int i=1;i<facility.size();i++) {
-           List listDetails = this.getInventory(getFacilityString(i));
-           for (Object list : listDetails) {
-               List<String> inventoryDetails = Arrays.asList(list.toString().split(":"));
-               if(itemId.equals(inventoryDetails.get(0))) {
-                   facilities.add(getFacilityString(i));
-               }
-           }
-       }
-       List<String> list = new ArrayList<>();
-       list.addAll(facilities);
-       return list;
-   }
-    public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
-       inventoryManager.reduceFacilityInventory(facilityName,itemId,quantity);
+    public List getFacilitiesWithItem(String itemId) throws NullException {
+        HashSet<String> facilities = new HashSet<>();
+        for (int i = 1; i <= facility.size(); i++) {
+            List listDetails = this.getInventory(getFacilityString(i));
+            for (Object list : listDetails) {
+                List<String> inventoryDetails = Arrays.asList(list.toString().split(":"));
+                if (itemId.equals(inventoryDetails.get(0))) {
+                    facilities.add(getFacilityString(i));
+                }
+            }
+        }
+        List<String> list = new ArrayList<>();
+        list.addAll(facilities);
+        return list;
     }
 
-    /**+
+    public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
+        inventoryManager.reduceFacilityInventory(facilityName, itemId, quantity);
+    }
+
+    /**
+     * +
      * This class will be modified in next phase. Right now we are making 20 copies,
      * but eventually will be having schedule of more than that.
-     * @throws NullException if Schedule is not present
+     *
      * @param facilityUtility
+     * @throws NullException if Schedule is not present
      */
-    public void setScheduler(HashMap<Integer, List<String>> facilityUtility) throws NullException {
+    private void setScheduler(HashMap<Integer, List<String>> facilityUtility) throws NullException {
         this.scheduler.setScheduler(FacilityImplementation.facilityUtility);
+    }
+
+    public int findArrivalDay(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
+        return this.scheduler.findArrivalDay(startDay, qunatityToProcess, facilityName, itemDetails);
+    }
+    public int setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
+        return this.scheduler.setSchedule(startDay,qunatityToProcess,facilityName,itemDetails);
+    }
+
+    public int getQuantityOfItem(String facilityName, List itemDetails) throws NullException {
+        return inventoryManager.getQuantityOfItem(facilityName,itemDetails);
     }
 
 }
