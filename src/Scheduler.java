@@ -1,7 +1,4 @@
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Muhammad Rafay on 5/8/17.
@@ -68,7 +65,10 @@ public class Scheduler {
         this.scheduler.put(facilityImplementation.getFacilityId(facilityName),scheduler);
         return endDay-1;
     }
-    public int setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
+    public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
+
+        List<Double> processingDayList = new ArrayList();
+        Double processingDay = 0.0;
         int facilityId = facilityImplementation.getFacilityId(facilityName);
         Map<Integer, Integer> scheduler = this.scheduler.get(facilityId);
         int processingPower = facilityImplementation.getProcessingPower(facilityName);
@@ -80,13 +80,14 @@ public class Scheduler {
                    if (scheduler.get(endDay) > qunatityToProcess) {
                        quantityOfItemsInFacility = quantityOfItemsInFacility - qunatityToProcess;
                        scheduler.put(endDay, scheduler.get(endDay) - qunatityToProcess);
+                       processingDay = processingDay +  qunatityToProcess/scheduler.get(endDay);
                        qunatityToProcess = 0;
                        endDay++;
 
                    } else {
                        if (processingPower > quantityOfItemsInFacility) {
                            scheduler.put(endDay, processingPower - quantityOfItemsInFacility);
-                           qunatityToProcess = qunatityToProcess - quantityOfItemsInFacility;
+                           processingDay = processingDay +  ((float)quantityOfItemsInFacility / (float)processingPower);
                            quantityOfItemsInFacility = 0;
                            endDay++;
 
@@ -94,6 +95,7 @@ public class Scheduler {
                            qunatityToProcess = qunatityToProcess - scheduler.get(endDay);
                            quantityOfItemsInFacility = quantityOfItemsInFacility - processingPower;
                            scheduler.put(endDay, 0);
+                           processingDay++;
                            endDay++;
                        }
                    }
@@ -106,6 +108,8 @@ public class Scheduler {
            }
         }
         this.scheduler.put(facilityId, scheduler);
-        return endDay-1;
+        processingDayList.add(processingDay);
+        processingDayList.add(Double.valueOf(endDay-1));
+        return processingDayList;
     }
 }

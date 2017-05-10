@@ -98,7 +98,8 @@ public class OrderProcessor {
     }
     private int calculateProcessingEndDay(List itemDetails, String travelTime, String facilityName,  Integer startDay, int quantityToProcess) throws NullException {
         int travelTimeInFloat =  (int) Math.ceil(Double.parseDouble(travelTime.toString()));
-        int endDay = orderManager.setSchedule(startDay, quantityToProcess, facilityName, itemDetails) + travelTimeInFloat;
+        List<Double> processingDayList = orderManager.setSchedule(startDay, quantityToProcess, facilityName, itemDetails);
+        int endDay = (int) (processingDayList.get(1)+ travelTimeInFloat);
         return (int)Math.ceil(endDay);
     }
 
@@ -127,7 +128,7 @@ public class OrderProcessor {
 
     private void processItem(List facilityRecords, List itemDetails, String startDay) throws NullException {
         Map<String, Integer > facilitySolution = new HashMap<>();
-        int totalProcessingTime = 0;
+        int totalProcessingTime;
         String travelTime;
         int quantityToProcess = Integer.parseInt(itemDetails.get(1).toString());
 
@@ -159,7 +160,7 @@ public class OrderProcessor {
         }
         System.out.println(facilitySolution);
     }
-    private void calculateTotalCost(String facilityName, List itemDetails, int quantityOfItem) {
+    private void calculateTotalCost(String facilityName, List itemDetails, int quantityOfItem) throws NullException {
         int itemCost = calculateItemCost(itemDetails, quantityOfItem);
         int facilityProcessingCost = calculateFacilityCost(facilityName);
 
@@ -169,8 +170,9 @@ public class OrderProcessor {
     private int calculateItemCost(List itemDetails, int quantityOfItems) {
         return ItemManager.getInstance().getItemCost(itemDetails.get(0).toString())*quantityOfItems;
     }
-    private int calculateFacilityCost(String facilityName) {
-        return 1;
+    private int calculateFacilityCost(String facilityName) throws NullException {
+       List facilityDetails = orderManager.getFacilityDetails(facilityName);
+       return 1;
     }
 
 //    private int getProcessingPower(String facilityName) throws NullException {

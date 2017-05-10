@@ -310,7 +310,7 @@ public class FacilityImplementation implements Facility {
     public int findArrivalDay(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
         return this.scheduler.findArrivalDay(startDay, qunatityToProcess, facilityName, itemDetails);
     }
-    public int setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
+    public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
         return this.scheduler.setSchedule(startDay,qunatityToProcess,facilityName,itemDetails);
     }
 

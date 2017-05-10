@@ -40,7 +40,7 @@ public class OrderManager implements Order {
     public int findArrivalDay(int startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException {
         return facilityManager.findArrivalDay(startDay,qunatityToProcess,facilityName, itemDetail);
     }
-    public int setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
+    public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
        return  this.facilityManager.setSchedule(startDay,qunatityToProcess,facilityName,itemDetails);
     }
 

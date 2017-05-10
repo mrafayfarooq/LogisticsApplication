@@ -19,6 +19,6 @@ interface Facility {
     List getFacilitiesWithItem(String itemId) throws NullException;
     void reduceFacilityInventory(String facilityName, String itemId, int quantity);
     int findArrivalDay(int startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException;
-    public int setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException;
+    public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException;
 
     }
