@@ -3,11 +3,11 @@ import java.util.*;
 /**
  * Created by Muhammad Rafay on 5/3/17.
  */
-public class OrderManager implements Order {
-    FacilityManager facilityManager;
+public class OrderManager {
+    Facility facilityManager;
     Order order;
 
-    OrderManager(FacilityManager facilityManager,ParserContext parserContext) throws NullException {
+    OrderManager(Facility facilityManager,ParserContext parserContext) throws NullException {
        this.facilityManager = facilityManager;
        this.order = new OrderImpl(parserContext.getEntries("Orders"));
     }
@@ -37,7 +37,7 @@ public class OrderManager implements Order {
     public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
         facilityManager.reduceFacilityInventory(facilityName,itemId,quantity);
     }
-    public int findArrivalDay(int startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException {
+    public int findArrivalDay(Integer startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException {
         return facilityManager.findArrivalDay(startDay,qunatityToProcess,facilityName, itemDetail);
     }
     public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {

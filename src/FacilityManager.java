@@ -1,6 +1,7 @@
 
 import org.w3c.dom.NodeList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +16,10 @@ import java.util.Map;
  * The class throws Null Exception if parser context is null.
  */
 
-public class FacilityManager implements Facility {
-    private Facility facility;
+public class FacilityManager {
+    private ArrayList<Facility> facility = new ArrayList<>();
+    private static FacilityManager instance;
+
 
     /**
      * +
@@ -25,58 +28,46 @@ public class FacilityManager implements Facility {
      * @param parserContext Context for parser. Can be XML, JSON etc
      * @throws NullException if invalid extension is passed
      */
-    FacilityManager(ParserContext parserContext) throws NullException {
+    // Singelton Instance
+    public static FacilityManager getInstance() throws NullException {
+        if(instance == null) {
+            instance = new FacilityManager();
+        }
+        return instance;
+    }
+    private FacilityManager() {}
+
+    public void loadFacility(ParserContext parserContext, String facilityNetworks, String facilityInventory) throws NullException {
         if (parserContext == null) {
             throw new NullException("Parser Context" + null);
         } else {
-            NodeList[] facilityDetails = {parserContext.getEntries("Facility&Network"), parserContext.getEntries("FacilityInventory")};
-            this.facility = new FacilityImplementation(facilityDetails);
+            NodeList[] facilityDetail = {parserContext.getEntries(facilityNetworks), parserContext.getEntries(facilityInventory)};
+            this.facility.add(new FacilityImplementation(facilityDetail));
         }
     }
 
-    // Get Schedule of Facility
-    public Map getScheduleOfFacility(String facilityName) throws NullException {
-        return facility.getScheduleOfFacility(facilityName);
+    public void printPrettyOutput() throws NullException {
+        for (Facility facility: this.facility) {
+            Output output= new Output(facility);
+            output.printFacilityDetails();
+            output.printItemCatalog();
+            output.printShortestPath("Santa Fe, NM", "Chicago, IL");
+                output.printShortestPath("Santa Fe, NM", "Chicago, IL");
+                output.printShortestPath("Atlanta, GA", "St. Louis, MO");
+                output.printShortestPath("Seattle, WA", "Nashville, TN");
+                output.printShortestPath("New York City, NY", "Phoenix, AZ");
+                output.printShortestPath("Fargo, ND", "Austin, TX");
+                output.printShortestPath("Denver, CO", "Miami, FL");
+                output.printShortestPath("Austin, TX", "Norfolk, VA");
+                output.printShortestPath("Miami, FL", "Seattle, WA");
+                output.printShortestPath("Los Angeles, CA", "Chicago, IL");
+                output.printShortestPath("Detroit, MI", "Nashville, TN");
+        }
     }
-
-    // Get Details fo Facility
-    public List getDetails(String facilityName) throws NullException {
-        return this.facility.getDetails(facilityName);
-    }
-
-    // Get Facility Networks
-    public List getNetworks(String facilityName) throws NullException {
-        return this.facility.getNetworks(facilityName);
-    }
-
-    // Get Inventory for the Facility
-    public List getInventory(String facilityName) throws NullException {
-        return this.facility.getInventory(facilityName);
-    }
-
-    // Get Shortest Path from two facility
-    public List getShortestPath(String source, String destination) throws NullException {
-        return this.facility.getShortestPath(source, destination);
-    }
-
-    // Get Depleted Inventory
-    public List getDepletedInventory(String facilityName) throws NullException {
-        return this.facility.getDepletedInventory(facilityName);
-    }
-
-    // Get List of Facilities with Order
-    public List getFacilitiesWithItem(String itemId) throws NullException {
-        return this.facility.getFacilitiesWithItem(itemId);
-    }
-
-    public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
-        this.facility.reduceFacilityInventory(facilityName, itemId, quantity);
-    }
-
-    public int findArrivalDay(int startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException {
-        return this.facility.findArrivalDay(startDay, qunatityToProcess, facilityName, itemDetail);
-    }
-    public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
-        return this.facility.setSchedule(startDay,qunatityToProcess,facilityName,itemDetails);
+    public void processOrders(ParserContext parserContext) throws NullException {
+        for (Facility facility: this.facility) {
+            OrderManager orderManager = new  OrderManager(facility, parserContext);
+            orderManager.processOrders();
+        }
     }
 }

@@ -13,9 +13,9 @@ class Output  {
     private final DecimalFormat daysFormatterTwo = new DecimalFormat("#0.00");
     private final DecimalFormat costFormatter = new DecimalFormat("$#,###");
     private final DecimalFormat distanceFormatter = new DecimalFormat("#,### mi");
-    private final FacilityManager facilityManager;
+    private final Facility facilityManager;
 
-    Output(FacilityManager facilityManager) {
+    Output(Facility facilityManager) {
         this.facilityManager = facilityManager;
     }
 
