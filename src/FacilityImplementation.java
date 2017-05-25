@@ -128,7 +128,8 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if the facility does not exist
      */
     public Map<Integer, Integer> getScheduleOfFacility(String facilityName) throws NullException {
-        return this.scheduler.getScheduleOfFacility(facilityName);
+        Map<Integer, Integer> copyScheduler = this.scheduler.getScheduleOfFacility(facilityName);
+        return copyScheduler;
     }
 
     /**
@@ -143,7 +144,8 @@ public class FacilityImplementation implements Facility {
         if (this.facility.get(facilityName) == null) {
             throw new NullException("Details for Facility " + facilityName);
         } else {
-            return this.facility.get(facilityName);
+            List<String> copyDetails = this.facility.get(facilityName);
+            return copyDetails;
         }
     }
 
@@ -159,7 +161,8 @@ public class FacilityImplementation implements Facility {
         if (this.network.get(facilityName) == null) {
             throw new NullException("Network for facility name " + facilityName);
         } else {
-            return this.network.get(facilityName);
+            List<String> copyDetails = this.network.get(facilityName);
+            return copyDetails;
         }
     }
 
@@ -172,7 +175,8 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if the facility does not exist
      */
     public List<String> getInventory(String facilityName) throws NullException {
-        return inventoryManager.getDetails(facilityName);
+        List<String> copyDetails = inventoryManager.getDetails(facilityName);
+        return copyDetails;
     }
 
     /**
@@ -183,8 +187,9 @@ public class FacilityImplementation implements Facility {
      * @return list of facility schedule
      * @throws NullException if the facility does not exist
      */
-    public List getDepletedInventory(String facilityName) throws NullException {
-        return inventoryManager.getDepletedInventory(facilityName);
+    public List<String> getDepletedInventory(String facilityName) throws NullException {
+        List<String> copyDetails = inventoryManager.getDepletedInventory(facilityName);
+        return copyDetails;
     }
 
     /**
@@ -196,7 +201,7 @@ public class FacilityImplementation implements Facility {
      * @return List of facility with shortest cost
      * @throws NullException if source or destination does not found.
      */
-    public List getShortestPath(String source, String destination) throws NullException {
+    public List<String> getShortestPath(String source, String destination) throws NullException {
         if (!source.equals(destination)) {
             // Get all Shortest Paths
             Map<Integer, Map<Integer, List<Integer>>> shortestDistance = new HashMap<>(shortestPathCalculator.getShortestDistance());

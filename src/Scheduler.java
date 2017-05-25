@@ -22,7 +22,7 @@ public class Scheduler {
             if(facilityUtility.get(i).isEmpty()) throw new NullException("Facility Name");
             else {
                 Map<Integer, Integer> copies = new HashMap<>();
-                for(int j=0; j<20; j++) {
+                for(int j=0; j<=20; j++) {
                    copies.put(j, processingPower);
                }
                 scheduler.put(i, copies);
@@ -76,17 +76,17 @@ public class Scheduler {
         int endDay = startDay;
         while (qunatityToProcess > 0 && quantityOfItemsInFacility > 0) {
            if(scheduler.containsKey(endDay)) {
-               if (scheduler.get(endDay) != 0) {
+               if (scheduler.get(endDay-1) != 0) {
                    if (scheduler.get(endDay) > qunatityToProcess) {
                        quantityOfItemsInFacility = quantityOfItemsInFacility - qunatityToProcess;
-                       scheduler.put(endDay, scheduler.get(endDay) - qunatityToProcess);
+                       scheduler.put(endDay-1, scheduler.get(endDay) - qunatityToProcess);
                        processingDay = processingDay +  qunatityToProcess/scheduler.get(endDay);
                        qunatityToProcess = 0;
                        endDay++;
 
                    } else {
                        if (processingPower > quantityOfItemsInFacility) {
-                           scheduler.put(endDay, processingPower - quantityOfItemsInFacility);
+                           scheduler.put(endDay-1, processingPower - quantityOfItemsInFacility);
                            processingDay = processingDay +  ((float)quantityOfItemsInFacility / (float)processingPower);
                            quantityOfItemsInFacility = 0;
                            endDay++;
@@ -94,7 +94,7 @@ public class Scheduler {
                        } else {
                            qunatityToProcess = qunatityToProcess - scheduler.get(endDay);
                            quantityOfItemsInFacility = quantityOfItemsInFacility - processingPower;
-                           scheduler.put(endDay, 0);
+                           scheduler.put(endDay-1, 0);
                            processingDay++;
                            endDay++;
                        }

@@ -88,10 +88,12 @@ class Output  {
         }
         System.out.println();
         System.out.format(String.format("%1s", "Available:"));
-
-        schedule.forEach( (k,v) -> {
-            System.out.format(String.format("%4s",v));
-        });
+        for(int i = 1; i<=20; i++) {
+            System.out.format(String.format("%4d", schedule.get(i)));
+        }
+//        schedule.forEach( (k,v) -> {
+//            System.out.format(String.format("%4s",v));
+//        });
         System.out.println();
     }
     public void printFacilityDetails() throws NullException {
