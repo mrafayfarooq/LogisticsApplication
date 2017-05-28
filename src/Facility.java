@@ -18,6 +18,6 @@ interface Facility {
     List getDepletedInventory(String  facilityName) throws NullException;
     List getFacilitiesWithItem(String itemId) throws NullException;
     void reduceFacilityInventory(String facilityName, String itemId, int quantity);
-    int findArrivalDay(int startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException;
-    List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException;
-    }
+    int findArrivalDay(int startDay, int quantityToProcess, String facilityName, List itemDetail) throws NullException;
+    List setSchedule(int startDay, int quantityToProcess, String facilityName, List itemDetails) throws NullException;
+}

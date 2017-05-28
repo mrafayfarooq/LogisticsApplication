@@ -1,29 +1,29 @@
 import java.util.*;
 
+
 /**
  * Created by Muhammad Rafay on 5/8/17.
+ *
+ * This class handle the schedule of facilities. It is responsible
+ * to find arrival day of an order, set initial schedule and setting
+ * the schedule of the facility.
  */
 public class Scheduler {
-    FacilityImplementation facilityImplementation;
     private final HashMap<Integer, Map<Integer, Integer>> scheduler = new HashMap<>(); // <FacilityName, List of first 20 schedule>
 
-    Scheduler(FacilityImplementation facilityImpl) {
-        this.facilityImplementation = facilityImpl;
-    }
     /**+
-     * This class will be modified in next phase. Right now we are making 20 copies,
-     * but eventually will be having schedule of more than that.
-     * @throws NullException if Schedule is not present
+     * This class set the initial schedule of each facility for first 20 days.
+     * @param facilityUtility List of facility with ID
+     * @throws NullException throws exception if Facility is not found.
      */
-    public void setScheduler(HashMap<Integer, List<String>> facilityUtility) throws NullException {
-        int processingPower = 0;
+    public void setInitialSchedule(HashMap<Integer, List<String>> facilityUtility) throws NullException {
         for(int i=1;i<=facilityUtility.size();i++) {
-            processingPower = facilityImplementation.getProcessingPower(facilityUtility.get(i).get(0));
             if(facilityUtility.get(i).isEmpty()) throw new NullException("Facility Name");
             else {
                 Map<Integer, Integer> copies = new HashMap<>();
+                // Set the schedule for first 20 days.
                 for(int j=0; j<=20; j++) {
-                   copies.put(j, processingPower);
+                   copies.put(j, Integer.valueOf(facilityUtility.get(i).get(1)));
                }
                 scheduler.put(i, copies);
             }
@@ -31,75 +31,82 @@ public class Scheduler {
     }
     /**+
      * Get Schedule of Facility
-     * @param facilityName name of the facility
+     * @param facilityID Id of the facility
      * @return list of facility schedule
      * @throws NullException if the facility does not exist
      */
-    public Map<Integer, Integer> getScheduleOfFacility(String facilityName) throws NullException {
-        return this.scheduler.get(facilityImplementation.getFacilityId(facilityName));
+    public Map<Integer, Integer> getScheduleOfFacility(int facilityID) throws NullException {
+        return this.scheduler.get(facilityID);
     }
     /**+
      * Find Arrival Time of the Item based on start day
      * and quantity to process in particular facility.
      * @param startDay day the order starts
-     * @param qunatityToProcess number of items to process
-     * @param facilityName name of the facility
+     * @param quantityToProcess number of items to process
+     * @param quantityOfItemsInFacility number of items in facility
+     * @param facilityDetails details of facility
      * @return arrival day of the item.
      * @throws NullException if facility name not found.
      */
 
-    public int findArrivalDay(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
-        Map<Integer, Integer> scheduler = this.scheduler.get(facilityImplementation.getFacilityId(facilityName));
-        int processingPower = facilityImplementation.getProcessingPower(facilityName);
-        int quantityOfItemsInFacility = facilityImplementation.getQuantityOfItem(facilityName, itemDetails);
+    public int findArrivalDay(int startDay, int quantityToProcess, int quantityOfItemsInFacility, List<String> facilityDetails) throws NullException {
+        int facilityID = Integer.valueOf(facilityDetails.get(0));
+        int processingPower = Integer.valueOf(facilityDetails.get(1));
         int endDay = startDay;
-        while(qunatityToProcess > 0 && quantityOfItemsInFacility > 0) {
+        Map<Integer, Integer> scheduler = this.scheduler.get(facilityID);
+
+        while(quantityToProcess > 0 && quantityOfItemsInFacility > 0) {
             if (scheduler.containsKey(endDay)) {
-                qunatityToProcess = qunatityToProcess - scheduler.get(endDay);
+                quantityToProcess = quantityToProcess - scheduler.get(endDay);
                 quantityOfItemsInFacility = quantityOfItemsInFacility - scheduler.get(endDay);
                 endDay++;
             } else {
                 scheduler.put(endDay, processingPower);
             }
         }
-        this.scheduler.put(facilityImplementation.getFacilityId(facilityName),scheduler);
+        this.scheduler.put(facilityID,scheduler);
         return endDay-1;
     }
-    public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
 
+    /**+
+     * Set Schedule of the Facility using the following information
+     * @param startDay the day order was given
+     * @param quantityToProcess quantity to be processed
+     * @param quantityOfItemsInFacility number of item in facility
+     * @param facilityDetails details of facility
+     * @return List includes Processing Days: Time it take for the facility to process the item, End Day: The end day of the facility.
+     * @throws NullException
+     */
+    public List setSchedule(int startDay, int quantityToProcess, int quantityOfItemsInFacility, List<String> facilityDetails) throws NullException {
         List<Double> processingDayList = new ArrayList();
         Double processingDay = 0.0;
-        int facilityId = facilityImplementation.getFacilityId(facilityName);
+        int facilityId = Integer.valueOf(facilityDetails.get(0));
         Map<Integer, Integer> scheduler = this.scheduler.get(facilityId);
-        int processingPower = facilityImplementation.getProcessingPower(facilityName);
-        int quantityOfItemsInFacility = facilityImplementation.getQuantityOfItem(facilityName, itemDetails);
+        int processingPower = Integer.valueOf(facilityDetails.get(1));
         int endDay = startDay;
-        while (qunatityToProcess > 0 && quantityOfItemsInFacility > 0) {
+        while (quantityToProcess > 0 && quantityOfItemsInFacility > 0) {
            if(scheduler.containsKey(endDay)) {
                if (scheduler.get(endDay-1) != 0) {
-                   if (scheduler.get(endDay) > qunatityToProcess) {
-                       quantityOfItemsInFacility = quantityOfItemsInFacility - qunatityToProcess;
-                       scheduler.put(endDay-1, scheduler.get(endDay) - qunatityToProcess);
-                       processingDay = processingDay +  qunatityToProcess/scheduler.get(endDay);
-                       qunatityToProcess = 0;
+                   if (scheduler.get(endDay) > quantityToProcess) {
+                       quantityOfItemsInFacility = quantityOfItemsInFacility - quantityToProcess;
+                       scheduler.put(endDay-1, scheduler.get(endDay) - quantityToProcess);
+                       processingDay = processingDay +  quantityToProcess/scheduler.get(endDay);
+                       quantityToProcess = 0;
                        endDay++;
-
                    } else {
                        if (processingPower > quantityOfItemsInFacility) {
                            scheduler.put(endDay-1, processingPower - quantityOfItemsInFacility);
-                           processingDay = processingDay +  ((float)quantityOfItemsInFacility / (float)processingPower);
+                           processingDay = processingDay +  ((float)quantityOfItemsInFacility / processingPower);
                            quantityOfItemsInFacility = 0;
                            endDay++;
-
                        } else {
-                           qunatityToProcess = qunatityToProcess - scheduler.get(endDay);
+                           quantityToProcess = quantityToProcess - scheduler.get(endDay);
                            quantityOfItemsInFacility = quantityOfItemsInFacility - processingPower;
                            scheduler.put(endDay-1, 0);
                            processingDay++;
                            endDay++;
                        }
                    }
-
                } else {
                    endDay++;
                }

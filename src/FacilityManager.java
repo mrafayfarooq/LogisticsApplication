@@ -9,26 +9,23 @@ import java.util.Map;
 /**
  * Created by Muhammad Rafay on 4/9/17.
  *
- * FacilityManager class implements Facility. This is facade implementing Facility interface.
- * The constructor of this class takes a valid Parser Context which contains the details of
- * the data loaded by the parses and load the object accordingly.
+ * This is a Facade for Facility. It holds the collection of Facility and provides singleton.
+ * This Facade can ask appropriate classes to process order, get the details from the facility and find
+ * shortest path between two facility.
  *
- * The class throws Null Exception if parser context is null.
  */
 
 public class FacilityManager {
-    private ArrayList<Facility> facility = new ArrayList<>();
-    private static FacilityManager instance;
+    private ArrayList<Facility> facility = new ArrayList<>();   // Collection of Facility
+    private static FacilityManager instance;    // Singleton Instance
 
 
     /**
-     * +
-     * Constructor taking Parser Context
      *
-     * @param parserContext Context for parser. Can be XML, JSON etc
+     * Constructor providing Singleton
+     *
      * @throws NullException if invalid extension is passed
      */
-    // Singelton Instance
     public static FacilityManager getInstance() throws NullException {
         if(instance == null) {
             instance = new FacilityManager();
@@ -36,6 +33,15 @@ public class FacilityManager {
         return instance;
     }
     private FacilityManager() {}
+
+    /**+
+     * Loads all the facilities by taking parser context and Facility Details.
+     * Throws Exception if Context is null or input details for facility is wrong.
+     * @param parserContext Context of Parser
+     * @param facilityNetworks Details of Facility Networks
+     * @param facilityInventory Details of Facility Inventory
+     * @throws NullException if any params is Null or not found.
+     */
 
     public void loadFacility(ParserContext parserContext, String facilityNetworks, String facilityInventory) throws NullException {
         if (parserContext == null) {
@@ -64,6 +70,12 @@ public class FacilityManager {
                 output.printShortestPath("Detroit, MI", "Nashville, TN");
         }
     }
+
+    /**
+     * Process Orders using Parser Context
+     * @param parserContext Context of Parser
+     * @throws NullException if Parser context is null
+     */
     public void processOrders(ParserContext parserContext) throws NullException {
         for (Facility facility: this.facility) {
             OrderManager orderManager = new  OrderManager(facility, parserContext);
