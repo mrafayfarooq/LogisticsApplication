@@ -46,7 +46,7 @@ public class OrderProcessor {
                     // Find all facilities which has that item
                     List facilitiesWithItem = orderManager.getFacilitiesWithItem(itemID);
                     // Find travel time
-                    Map<String , Integer> facilitiesWithShortestPath = this.findFacilitiesWithShortestPath(orderDetails, facilitiesWithItem);
+                    Map<String , Integer> facilitiesWithShortestPath = orderManager.findFacilitiesWithShortestPath(orderDetails, facilitiesWithItem);
                     // Find Total Processing Time
                     List<Entry<String,Integer>> facilityRecord = this.getProcessingTimeOfFacilities(facilitiesWithShortestPath, itemDetails, orderDetails);
                   //  System.out.println(facilityRecord);
@@ -60,19 +60,6 @@ public class OrderProcessor {
         }
     }
 
-    private Map<String, Integer> findFacilitiesWithShortestPath(String destination, List facilitiesWithItem) throws NullException {
-        Map<String,Integer> facilityWithShortestPath = new HashMap();
-        for (Object list : facilitiesWithItem) {
-            List path = orderManager.getShortestPath(list.toString(), destination.split("-")[0]);
-            if(path!= null) {
-                int distance = (int) path.get(path.size()-1);
-                float days = (float)distance/400;
-
-                facilityWithShortestPath.put(list.toString(), (int) Math.ceil(days));
-            }
-        }
-        return facilityWithShortestPath;
-    }
     private int getTravelTime(String source, String destination) throws NullException {
         List path = orderManager.getShortestPath(source, destination);
         float days = 0;
@@ -84,22 +71,22 @@ public class OrderProcessor {
     }
 
 
-    private List<Entry<String,Integer>> getProcessingTimeOfFacilities(Map<String, Integer> facilityWithShortestPath, List itemDetails, String startDay) throws NullException {
+    private List<Entry<String,Integer>> getProcessingTimeOfFacilities(Map<String, Integer> facilityWithShortestPath, List itemDetails, String orderDetails) throws NullException {
         Map<String, Integer> facilitiesWithTravelTime = new HashMap<>();
         for (Map.Entry<String, Integer> entry : facilityWithShortestPath.entrySet()) {
-            if(getQuantityOfItem(entry.getKey(),itemDetails) > 0) {
-                int totalProcessingTime = calculateProcessingEndDay(itemDetails, entry, startDay);
+            if(orderManager.getQuantityOfItem(entry.getKey(),itemDetails) > 0) {
+                int totalProcessingTime = calculateProcessingEndDay(itemDetails, entry, orderDetails);
                 facilitiesWithTravelTime.put(entry.getKey(), totalProcessingTime);
             }
         }
        return sort(facilitiesWithTravelTime);
     }
-    private List<Entry<String,Integer>> getProcessingTimeOfFacilities(List facilityRecords, List itemDetails, String destination) throws NullException {
+    private List<Entry<String,Integer>> getProcessingTimeOfFacilities(List facilityRecords, List itemDetails, String orderDetails) throws NullException {
         Map<String, Integer> facilitiesWithTravelTime = new HashMap<>();
 
         for(Object entry:facilityRecords) {
             String facilityName = entry.toString().split("=")[0];
-            int totalProcessingTime = calculateProcessingEndDay(itemDetails, entry, destination);
+            int totalProcessingTime = calculateProcessingEndDay(itemDetails, entry, orderDetails);
             facilitiesWithTravelTime.put(facilityName, totalProcessingTime );
         }
         return sort(facilitiesWithTravelTime);
@@ -108,8 +95,6 @@ public class OrderProcessor {
     private int calculateProcessingEndDay(List itemDetails, Object facility, String destination) throws NullException {
         int quantityToProcess = Integer.parseInt(itemDetails.get(1).toString());
         String facilityName = facility.toString().split("=")[0];
-
-//        int quantityOfItemInFacility = getQuantityOfItem(facility.getKey(), itemDetails);
         int travelTime = getTravelTime(facilityName, destination.split("-")[0]);
         int endDay = orderManager.findArrivalDay(Integer.valueOf(destination.split("-")[1]), quantityToProcess, facilityName, itemDetails) + travelTime;
         return endDay;
@@ -122,17 +107,6 @@ public class OrderProcessor {
         return processingDayList;
     }
 
-
-    private int getQuantityOfItem(String facilityName, List itemDetails) throws NullException {
-        List inventoryDetails = orderManager.getInventory(facilityName);
-        for(Object list : inventoryDetails) {
-            List<String> inventory = Arrays.asList(list.toString().split(":"));
-            if (inventory.get(0).equals(itemDetails.get(0).toString())) {
-                return Integer.parseInt(inventory.get(1));
-            }
-        }
-        return 0;
-    }
     private List<Entry<String,Integer>> sort(Map map) {
         Set<Entry<String, Integer>> set = map.entrySet();
         ArrayList<Entry<String, Integer>> list = new ArrayList<Entry<String, Integer>>(set);
@@ -153,7 +127,7 @@ public class OrderProcessor {
             List <Integer> timeAndQuantity = new ArrayList<>();
             String recordDetails = facilityRecords.get(0).toString();
             String facilityName = recordDetails.split("=")[0];
-            int quantityOfItemInFacility = getQuantityOfItem(facilityName, itemDetails);
+            int quantityOfItemInFacility = orderManager.getQuantityOfItem(facilityName, itemDetails);
             String itemID = itemDetails.get(0).toString();
             if(quantityToProcess <= 0) {
                 prettyPrint(facilitySolution);

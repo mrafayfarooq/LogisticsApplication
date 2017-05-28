@@ -10,10 +10,10 @@ import java.util.TreeMap;
 /**
  * Created by Muhammad Rafay on 5/3/17.
  */
-public class OrderImpl implements Order {
+public class OrderLoader {
     private final TreeMap<String, List<String>> orderDetail = new TreeMap<>();
 
-    OrderImpl(NodeList orderDetails) {
+    OrderLoader(NodeList orderDetails) {
         loadOrder(orderDetails);
     }
     /**+

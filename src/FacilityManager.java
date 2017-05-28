@@ -21,24 +21,27 @@ public class FacilityManager {
 
 
     /**
-     *
      * Constructor providing Singleton
      *
      * @throws NullException if invalid extension is passed
      */
     public static FacilityManager getInstance() throws NullException {
-        if(instance == null) {
+        if (instance == null) {
             instance = new FacilityManager();
         }
         return instance;
     }
-    private FacilityManager() {}
 
-    /**+
+    private FacilityManager() {
+    }
+
+    /**
+     * +
      * Loads all the facilities by taking parser context and Facility Details.
      * Throws Exception if Context is null or input details for facility is wrong.
-     * @param parserContext Context of Parser
-     * @param facilityNetworks Details of Facility Networks
+     *
+     * @param parserContext     Context of Parser
+     * @param facilityNetworks  Details of Facility Networks
      * @param facilityInventory Details of Facility Inventory
      * @throws NullException if any params is Null or not found.
      */
@@ -53,32 +56,67 @@ public class FacilityManager {
     }
 
     public void printPrettyOutput() throws NullException {
-        for (Facility facility: this.facility) {
-            Output output= new Output(facility);
+        for (Facility facility : this.facility) {
+            Output output = new Output(facility);
             output.printFacilityDetails();
             output.printItemCatalog();
             output.printShortestPath("Santa Fe, NM", "Chicago, IL");
-                output.printShortestPath("Santa Fe, NM", "Chicago, IL");
-                output.printShortestPath("Atlanta, GA", "St. Louis, MO");
-                output.printShortestPath("Seattle, WA", "Nashville, TN");
-                output.printShortestPath("New York City, NY", "Phoenix, AZ");
-                output.printShortestPath("Fargo, ND", "Austin, TX");
-                output.printShortestPath("Denver, CO", "Miami, FL");
-                output.printShortestPath("Austin, TX", "Norfolk, VA");
-                output.printShortestPath("Miami, FL", "Seattle, WA");
-                output.printShortestPath("Los Angeles, CA", "Chicago, IL");
-                output.printShortestPath("Detroit, MI", "Nashville, TN");
+            output.printShortestPath("Santa Fe, NM", "Chicago, IL");
+            output.printShortestPath("Atlanta, GA", "St. Louis, MO");
+            output.printShortestPath("Seattle, WA", "Nashville, TN");
+            output.printShortestPath("New York City, NY", "Phoenix, AZ");
+            output.printShortestPath("Fargo, ND", "Austin, TX");
+            output.printShortestPath("Denver, CO", "Miami, FL");
+            output.printShortestPath("Austin, TX", "Norfolk, VA");
+            output.printShortestPath("Miami, FL", "Seattle, WA");
+            output.printShortestPath("Los Angeles, CA", "Chicago, IL");
+            output.printShortestPath("Detroit, MI", "Nashville, TN");
         }
     }
 
     /**
      * Process Orders using Parser Context
+     *
      * @param parserContext Context of Parser
      * @throws NullException if Parser context is null
      */
     public void processOrders(ParserContext parserContext) throws NullException {
-        for (Facility facility: this.facility) {
-            OrderManager.getInstance(facility, parserContext).processOrders();
-        }
+        OrderManager.getInstance(this, parserContext).processOrders();
+    }
+
+    public List getShortestPath(String source, String destination) throws NullException {
+        return facility.get(0).getShortestPath(source, destination);
+    }
+
+    public List getFacilityDetails(String facilityName) throws NullException {
+        return facility.get(0).getDetails(facilityName);
+    }
+
+    public List getInventory(String facilityName) throws NullException {
+        return facility.get(0).getInventory(facilityName);
+    }
+
+    public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
+        facility.get(0).reduceFacilityInventory(facilityName, itemId, quantity);
+    }
+
+    public int findArrivalDay(Integer startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException {
+        return facility.get(0).findArrivalDay(startDay, qunatityToProcess, facilityName, itemDetail);
+    }
+
+    public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
+        return this.facility.get(0).setSchedule(startDay, qunatityToProcess, facilityName, itemDetails);
+    }
+
+    public List getFacilitiesWithItem(String itemId) throws NullException {
+        return this.facility.get(0).getFacilitiesWithItem(itemId);
+    }
+
+    public Map<String, Integer> findFacilitiesWithShortestPath(String destination, List facilitiesWithItem) throws NullException {
+        return this.facility.get(0).findFacilitiesWithShortestPath(destination, facilitiesWithItem);
+    }
+
+    public int getQuantityOfItem(String facilityName, List itemDetails) throws NullException {
+        return this.facility.get(0).getQuantityOfItem(facilityName, itemDetails);
     }
 }

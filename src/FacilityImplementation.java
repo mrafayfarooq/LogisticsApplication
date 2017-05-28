@@ -277,11 +277,13 @@ public class FacilityImplementation implements Facility {
         return list;
     }
 
-    /**+
+    /**
+     * +
      * Reduce facility inventory when Items are processed.
+     *
      * @param facilityName Name of the Facility from which the inventory should be reduced.
-     * @param itemId Item ID which needs to be reduced.
-     * @param quantity Quantity of Items needed to be reduced.
+     * @param itemId       Item ID which needs to be reduced.
+     * @param quantity     Quantity of Items needed to be reduced.
      */
     public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
         inventoryManager.reduceFacilityInventory(facilityName, itemId, quantity);
@@ -290,6 +292,7 @@ public class FacilityImplementation implements Facility {
     /**
      * +
      * Set the Initial Scheduler of the facility
+     *
      * @param facilityUtility
      * @throws NullException if facility is not found
      */
@@ -297,39 +300,47 @@ public class FacilityImplementation implements Facility {
         this.scheduler.setInitialSchedule(facilityUtility);
     }
 
-    /**+
+    /**
+     * +
      * Find Arrival Day of an order using following information.
      * This method does not set schedule of facility but only find arrival day.
-     * @param startDay day when order was given
+     *
+     * @param startDay          day when order was given
      * @param quantityToProcess number of items needed to process
-     * @param facilityName name of the facility which needs to process the item
-     * @param itemDetails details of the item
+     * @param facilityName      name of the facility which needs to process the item
+     * @param itemDetails       details of the item
      * @return arrival day
      * @throws NullException
      */
     public int findArrivalDay(int startDay, int quantityToProcess, String facilityName, List itemDetails) throws NullException {
-        return this.scheduler.findArrivalDay(startDay, quantityToProcess, getQuantityOfItem(facilityName,itemDetails), getDetails(facilityName));
+        return this.scheduler.findArrivalDay(startDay, quantityToProcess, getQuantityOfItem(facilityName, itemDetails), getDetails(facilityName));
     }
 
-    /**+
+    /**
+     * +
      * Set schedule of the facility
-     * @param startDay day when order was given
+     *
+     * @param startDay          day when order was given
      * @param quantityToProcess number of items needed to process
-     * @param facilityName name of the facility which needs to process the item
-     * @param itemDetails details of the item
+     * @param facilityName      name of the facility which needs to process the item
+     * @param itemDetails       details of the item
      * @return List includes Processing Days: Time it take for the facility to process the item, End Day: The end day of the facility.
      * @throws NullException
      */
 
     public List setSchedule(int startDay, int quantityToProcess, String facilityName, List itemDetails) throws NullException {
-        return this.scheduler.setSchedule(startDay,quantityToProcess, getQuantityOfItem(facilityName,itemDetails), getDetails(facilityName));
+        return this.scheduler.setSchedule(startDay, quantityToProcess, getQuantityOfItem(facilityName, itemDetails), getDetails(facilityName));
     }
 
-    private int getQuantityOfItem(String facilityName, List itemDetails) throws NullException {
-        return inventoryManager.getQuantityOfItem(facilityName,itemDetails);
+    public int getQuantityOfItem(String facilityName, List itemDetails) throws NullException {
+        return inventoryManager.getQuantityOfItem(facilityName, itemDetails);
     }
 
     public int getFacilityQuantities() {
         return facility.size();
+    }
+
+    public Map<String, Integer> findFacilitiesWithShortestPath(String destination, List facilitiesWithItem) throws NullException {
+        return shortestPathCalculator.findFacilitiesWithShortestPath(destination, facilitiesWithItem);
     }
 }

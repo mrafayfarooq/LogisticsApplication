@@ -178,5 +178,17 @@ public class ShortestPathCalculator {
             return null;
         }
     }
+    public Map<String, Integer> findFacilitiesWithShortestPath(String destination, List facilitiesWithItem) throws NullException {
+        Map<String,Integer> facilityWithShortestPath = new HashMap();
+        for (Object list : facilitiesWithItem) {
+            List path = getShortestPath(list.toString(), destination.split("-")[0]);
+            if(path!= null) {
+                int distance = (int) path.get(path.size()-1);
+                float days = (float)distance/400;
 
+                facilityWithShortestPath.put(list.toString(), (int) Math.ceil(days));
+            }
+        }
+        return facilityWithShortestPath;
+    }
 }
