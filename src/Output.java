@@ -77,7 +77,7 @@ class Output  {
             System.out.println(depletedInventory.toString().replace("[","").replace("]",""));
         }
     }
-    private void printSceduleOfFacility(String facilityName) throws NullException {
+    private void printScheduleOfFacility(String facilityName) throws NullException {
 
         Map<Integer, Integer> schedule = this.facilityManager.getScheduleOfFacility(facilityName);
         System.out.println("Schedule:");
@@ -110,7 +110,7 @@ class Output  {
             this.printFacilityInventory(facilityName);
             this.printDepletedInventory(facilityName);
             System.out.println();
-            this.printSceduleOfFacility(facilityName);
+            this.printScheduleOfFacility(facilityName);
             System.out.println();
         }
     }

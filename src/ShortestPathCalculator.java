@@ -13,7 +13,7 @@ import java.util.*;
 
 public class ShortestPathCalculator {
     private static ShortestPathCalculator instance;
-    private static final int facilities = 18;
+    private FacilityImplementation facilityImpl;
     private final Map<Integer, Map<Integer, List<Integer>>> shortestDistance;  // Each facility ID is mapped into a Map which contains the ID of the destination and details of distance.
     public static ShortestPathCalculator getInstance(FacilityImplementation facilityImplementation) {
         // Get Singleton instance of Class
@@ -25,6 +25,8 @@ public class ShortestPathCalculator {
     // Calculate Shortest Path
     private ShortestPathCalculator(FacilityImplementation facilityImplementation) {
         shortestDistance = new HashMap<>();
+        facilityImpl = facilityImplementation;
+        int facilities = facilityImpl.getFacilityQuantities();
         int[][] network = new int[facilities+1][facilities+1];
         // Initializing the network graph
         for(int i = 1; i<=facilities; i++) {
@@ -65,7 +67,7 @@ public class ShortestPathCalculator {
         int min = Integer.MAX_VALUE, min_index = -1;
 
         // Looping through all facilities and checking if the facility
-        for (int v = 1; v <= facilities; v++)
+        for (int v = 1; v <= facilityImpl.getFacilityQuantities(); v++)
             if (!seen[v] && dist[v] <= min) {
                 min = dist[v];
                 min_index = v;
@@ -84,7 +86,7 @@ public class ShortestPathCalculator {
      */
     private void calculateSolution(int[] dist, int src, int[] source) {
         Map<Integer, List<Integer>> shortestPaths = new HashMap<>();
-        for (int i = 1; i <= facilities; i++) {
+        for (int i = 1; i <= facilityImpl.getFacilityQuantities(); i++) {
             List<Integer> paths = new ArrayList();
             paths.add(dist[i]);
             calculatePath(source,i, paths);
@@ -101,6 +103,7 @@ public class ShortestPathCalculator {
      * @param src the source facility to start the algorithm
      */
     private void calculateShortestPath(int graph[][], int src) {
+        int facilities = facilityImpl.getFacilityQuantities();
         int distance[] = new int[facilities+1]; // Array which will hold all the distances
         Boolean seen[] = new Boolean[facilities+1];
         int source[] = new int[facilities+1];
@@ -144,4 +147,36 @@ public class ShortestPathCalculator {
     Map<Integer, Map<Integer, List<Integer>>> getShortestDistance() {
         return shortestDistance;
     }
+    /**
+     * +
+     * Get Shortest Path between Source and Destination
+     *
+     * @param source      facility name
+     * @param destination facility name
+     * @return List of facility with shortest cost
+     * @throws NullException if source or destination does not found.
+     */
+    public List<String> getShortestPath(String source, String destination) throws NullException {
+        if (!source.equals(destination)) {
+            // Get all Shortest Paths
+            Map<Integer, Map<Integer, List<Integer>>> shortestDistance = new HashMap<>(getShortestDistance());
+            // Get shortest path of source from all
+            Map<Integer, List<Integer>> pathDetails = new HashMap<>(shortestDistance.get(facilityImpl.getFacilityId(source)));
+            // Get distance
+            Integer distance = pathDetails.get(facilityImpl.getFacilityId(destination)).get(0);
+            // Adding path into Path List
+            List path = new ArrayList();
+            for (int values : pathDetails.get(facilityImpl.getFacilityId(destination))) {
+                if (values <= facilityImpl.getFacilityQuantities()) {
+                    path.add(facilityImpl.getFacilityString(values));
+                }
+            }
+            path.add(distance);
+            pathDetails.clear();
+            return path;
+        } else {
+            return null;
+        }
+    }
+
 }

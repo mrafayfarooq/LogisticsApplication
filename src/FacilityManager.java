@@ -78,8 +78,7 @@ public class FacilityManager {
      */
     public void processOrders(ParserContext parserContext) throws NullException {
         for (Facility facility: this.facility) {
-            OrderManager orderManager = new  OrderManager(facility, parserContext);
-            orderManager.processOrders();
+            OrderManager.getInstance(facility, parserContext).processOrders();
         }
     }
 }

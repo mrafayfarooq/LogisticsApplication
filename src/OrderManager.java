@@ -6,8 +6,15 @@ import java.util.*;
 public class OrderManager {
     Facility facilityManager;
     Order order;
+    private static OrderManager instance;    // Singleton Instance
+    public static OrderManager getInstance(Facility facilityManager, ParserContext parserContext) throws NullException {
+        if(instance == null) {
+            instance = new OrderManager(facilityManager, parserContext);
+        }
+        return instance;
+    }
 
-    OrderManager(Facility facilityManager,ParserContext parserContext) throws NullException {
+    private OrderManager(Facility facilityManager,ParserContext parserContext) throws NullException {
        this.facilityManager = facilityManager;
        this.order = new OrderImpl(parserContext.getEntries("Orders"));
     }
@@ -41,7 +48,7 @@ public class OrderManager {
         return facilityManager.findArrivalDay(startDay,qunatityToProcess,facilityName, itemDetail);
     }
     public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
-       return  this.facilityManager.setSchedule(startDay,qunatityToProcess,facilityName,itemDetails);
+       return this.facilityManager.setSchedule(startDay,qunatityToProcess,facilityName,itemDetails);
     }
 
     }

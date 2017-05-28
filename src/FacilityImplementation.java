@@ -202,26 +202,7 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if source or destination does not found.
      */
     public List<String> getShortestPath(String source, String destination) throws NullException {
-        if (!source.equals(destination)) {
-            // Get all Shortest Paths
-            Map<Integer, Map<Integer, List<Integer>>> shortestDistance = new HashMap<>(shortestPathCalculator.getShortestDistance());
-            // Get shortest path of source from all
-            Map<Integer, List<Integer>> pathDetails = new HashMap<>(shortestDistance.get(this.getFacilityId(source)));
-            // Get distance
-            Integer distance = pathDetails.get(this.getFacilityId(destination)).get(0);
-            // Adding path into Path List
-            List path = new ArrayList();
-            for (int values : pathDetails.get(this.getFacilityId(destination))) {
-                if (values <= facility.size()) {
-                    path.add(getFacilityString(values));
-                }
-            }
-            path.add(distance);
-            pathDetails.clear();
-            return path;
-        } else {
-            return null;
-        }
+        return shortestPathCalculator.getShortestPath(source, destination);
     }
 
     /**
@@ -248,7 +229,7 @@ public class FacilityImplementation implements Facility {
      * @return facility id
      * @throws NullException if facility doesnt exist
      */
-    private int getFacilityId(String facilityName) throws NullException {
+    public int getFacilityId(String facilityName) throws NullException {
         if (facility.get(facilityName) == null)
             throw new NullException("Facility " + facilityName);
         else {
@@ -348,4 +329,7 @@ public class FacilityImplementation implements Facility {
         return inventoryManager.getQuantityOfItem(facilityName,itemDetails);
     }
 
+    public int getFacilityQuantities() {
+        return facility.size();
+    }
 }
