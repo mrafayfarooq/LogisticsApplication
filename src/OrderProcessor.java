@@ -75,7 +75,8 @@ public class OrderProcessor {
         Map<String, Integer> facilitiesWithTravelTime = new HashMap<>();
         for (Map.Entry<String, Integer> entry : facilityWithShortestPath.entrySet()) {
             if(orderManager.getQuantityOfItem(entry.getKey(),itemDetails) > 0) {
-                int totalProcessingTime = calculateProcessingEndDay(itemDetails, entry, orderDetails);
+                String facilityName = entry.toString().split("=")[0];
+                int totalProcessingTime = calculateProcessingEndDay(itemDetails, facilityName, orderDetails);
                 facilitiesWithTravelTime.put(entry.getKey(), totalProcessingTime);
             }
         }
@@ -83,25 +84,23 @@ public class OrderProcessor {
     }
     private List<Entry<String,Integer>> getProcessingTimeOfFacilities(List facilityRecords, List itemDetails, String orderDetails) throws NullException {
         Map<String, Integer> facilitiesWithTravelTime = new HashMap<>();
-
         for(Object entry:facilityRecords) {
             String facilityName = entry.toString().split("=")[0];
-            int totalProcessingTime = calculateProcessingEndDay(itemDetails, entry, orderDetails);
+            int totalProcessingTime = calculateProcessingEndDay(itemDetails, facilityName, orderDetails);
             facilitiesWithTravelTime.put(facilityName, totalProcessingTime );
         }
         return sort(facilitiesWithTravelTime);
     }
 
-    private int calculateProcessingEndDay(List itemDetails, Object facility, String destination) throws NullException {
+    private int calculateProcessingEndDay(List itemDetails, String facilityName, String orderDetails) throws NullException {
         int quantityToProcess = Integer.parseInt(itemDetails.get(1).toString());
-        String facilityName = facility.toString().split("=")[0];
-        int travelTime = getTravelTime(facilityName, destination.split("-")[0]);
-        int endDay = orderManager.findArrivalDay(Integer.valueOf(destination.split("-")[1]), quantityToProcess, facilityName, itemDetails) + travelTime;
+        int travelTime = getTravelTime(facilityName, orderDetails.split("-")[0]);
+        int endDay = orderManager.findArrivalDay(Integer.valueOf(orderDetails.split("-")[1]), quantityToProcess, facilityName, itemDetails) + travelTime;
         return endDay;
     }
 
-    private List<Double> calculateProcessingEndDay(List itemDetails, int travelTime, String facilityName, Integer startDay, int quantityToProcess) throws NullException {
-        List<Double> processingDayList = orderManager.setSchedule(startDay, quantityToProcess, facilityName, itemDetails);
+    private List<Double> calculateProcessingEndDay(List itemDetails, int travelTime, String facilityName, int startDay) throws NullException {
+        List<Double> processingDayList = orderManager.setSchedule(startDay, Integer.parseInt(itemDetails.get(1).toString()), facilityName, itemDetails);
         int endDay = (int) (processingDayList.get(1)+ travelTime);
         processingDayList.set(1, (double) endDay);
         return processingDayList;
@@ -135,7 +134,7 @@ public class OrderProcessor {
             }
             int travelTime = getTravelTime(facilityName, orderDetails.split("-")[0]);
             int costOfFacility = Integer.valueOf(orderManager.getFacilityDetails(facilityName).get(2).toString());
-            List completeProcessingDetails =  Arrays.asList(facilityName, quantityToProcess, orderDetails, itemDetails, travelTime);
+            List completeProcessingDetails =  Arrays.asList(facilityName, orderDetails, itemDetails, travelTime);
 
             if(quantityOfItemInFacility <= quantityToProcess) {
                 totalProcessingTime = calculateTotalProcessingTime(completeProcessingDetails);
@@ -186,7 +185,9 @@ public class OrderProcessor {
         System.out.println(formatter);
     }
     private List<Double> calculateTotalProcessingTime(List completeProcessingDetails) throws NullException {
-        return calculateProcessingEndDay((List) completeProcessingDetails.get(3),(int) completeProcessingDetails.get(4), (String)completeProcessingDetails.get(0), Integer.valueOf(completeProcessingDetails.get(2).toString().split("-")[1]), Integer.valueOf(completeProcessingDetails.get(1).toString()));
+        return calculateProcessingEndDay((List) completeProcessingDetails.get(2),(int) completeProcessingDetails.get(3), (String)completeProcessingDetails.get(0), Integer.valueOf(completeProcessingDetails.get(1).toString().split("-")[1]));
     }
+
+    private 
 
 }
