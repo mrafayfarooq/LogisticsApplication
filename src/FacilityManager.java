@@ -119,4 +119,8 @@ public class FacilityManager {
     public int getQuantityOfItem(String facilityName, List itemDetails) throws NullException {
         return this.facility.get(0).getQuantityOfItem(facilityName, itemDetails);
     }
+
+    public int getTravelTimeInDays(String source, String destination) throws NullException {
+        return this.facility.get(0).getTravelTimeInDays(source, destination);
+    }
 }

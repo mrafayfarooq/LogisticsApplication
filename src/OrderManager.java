@@ -36,16 +36,8 @@ public class OrderManager {
         orderProcessor.processOrder(orders);
     }
 
-    public List getShortestPath(String source, String destination) throws NullException {
-        return facilityManager.getShortestPath(source, destination);
-    }
-
     public List getFacilityDetails(String facilityName) throws NullException {
         return facilityManager.getFacilityDetails(facilityName);
-    }
-
-    public List getInventory(String facilityName) throws NullException {
-        return facilityManager.getInventory(facilityName);
     }
 
     public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
@@ -66,5 +58,9 @@ public class OrderManager {
 
     public int getQuantityOfItem(String facilityName, List itemDetails) throws NullException {
         return this.facilityManager.getQuantityOfItem(facilityName, itemDetails);
+    }
+
+    public int getTravelTimeInDays(String source, String destination) throws NullException {
+        return this.facilityManager.getTravelTimeInDays(source, destination);
     }
 }

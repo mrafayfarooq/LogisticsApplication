@@ -27,7 +27,6 @@ public class OrderProcessor {
     public void processOrder(TreeMap<String, List<String>> order) throws NullException {
         for (Map.Entry<String, List<String>> entry : order.entrySet()) {
             // Get Order Details
-            String orderID = entry.getKey();
             List itemOrdered = entry.getValue().subList(1,entry.getValue().size());
             String orderDetails = entry.getValue().get(0);
             prettyPrint(entry);
@@ -41,8 +40,6 @@ public class OrderProcessor {
                 if(itemManager.checkItem(itemDetails.get(0).toString())) {
                     // Get the ID
                     String itemID = itemDetails.get(0).toString();
-                    // Get the quantity
-                    int quantity = Integer.parseInt(itemDetails.get(1).toString());
                     // Find all facilities which has that item
                     List facilitiesWithItem = orderManager.getFacilitiesWithItem(itemID);
                     // Find travel time
@@ -59,17 +56,6 @@ public class OrderProcessor {
             }
         }
     }
-
-    private int getTravelTime(String source, String destination) throws NullException {
-        List path = orderManager.getShortestPath(source, destination);
-        float days = 0;
-        if(path!= null) {
-            int distance = (int) path.get(path.size()-1);
-            days = (float) distance/400;
-        }
-        return (int)Math.ceil(days);
-    }
-
 
     private List<Entry<String,Integer>> getProcessingTimeOfFacilities(Map<String, Integer> facilityWithShortestPath, List itemDetails, String orderDetails) throws NullException {
         Map<String, Integer> facilitiesWithTravelTime = new HashMap<>();
@@ -94,7 +80,7 @@ public class OrderProcessor {
 
     private int calculateProcessingEndDay(List itemDetails, String facilityName, String orderDetails) throws NullException {
         int quantityToProcess = Integer.parseInt(itemDetails.get(1).toString());
-        int travelTime = getTravelTime(facilityName, orderDetails.split("-")[0]);
+        int travelTime = orderManager.getTravelTimeInDays(facilityName, orderDetails.split("-")[0]);
         int endDay = orderManager.findArrivalDay(Integer.valueOf(orderDetails.split("-")[1]), quantityToProcess, facilityName, itemDetails) + travelTime;
         return endDay;
     }
@@ -120,40 +106,22 @@ public class OrderProcessor {
 
     private void processEachItem(List facilityRecords, List itemDetails, String orderDetails) throws NullException {
         LinkedHashMap<String, List<Integer> > facilitySolution = new LinkedHashMap<>();
-        List<Double> totalProcessingTime;
         int quantityToProcess = Integer.parseInt(itemDetails.get(1).toString());
         while(facilityRecords.size() != 0) {
-            List <Integer> timeAndQuantity = new ArrayList<>();
             String recordDetails = facilityRecords.get(0).toString();
             String facilityName = recordDetails.split("=")[0];
             int quantityOfItemInFacility = orderManager.getQuantityOfItem(facilityName, itemDetails);
-            String itemID = itemDetails.get(0).toString();
             if(quantityToProcess <= 0) {
                 prettyPrint(facilitySolution);
                 return;
             }
-            int travelTime = getTravelTime(facilityName, orderDetails.split("-")[0]);
-            int costOfFacility = Integer.valueOf(orderManager.getFacilityDetails(facilityName).get(2).toString());
+            int travelTime = orderManager.getTravelTimeInDays(facilityName, orderDetails.split("-")[0]);
             List completeProcessingDetails =  Arrays.asList(facilityName, orderDetails, itemDetails, travelTime);
-
             if(quantityOfItemInFacility <= quantityToProcess) {
-                totalProcessingTime = calculateTotalProcessingTime(completeProcessingDetails);
-                orderManager.reduceFacilityInventory(facilityName, itemID, quantityOfItemInFacility);
                 quantityToProcess = quantityToProcess - quantityOfItemInFacility;
-                int cost = costCalculator.calculateTotalCost(itemDetails, quantityOfItemInFacility, totalProcessingTime.get(0), travelTime, costOfFacility );
-                timeAndQuantity.add(totalProcessingTime.get(1).intValue());
-                timeAndQuantity.add(quantityOfItemInFacility);
-                timeAndQuantity.add(cost);
-                facilitySolution.put(facilityName, timeAndQuantity);
-
+                facilitySolution.put(facilityName, getProcessingSolution(completeProcessingDetails));
             } else if(quantityOfItemInFacility > quantityToProcess) {
-                totalProcessingTime = calculateTotalProcessingTime(completeProcessingDetails);
-                orderManager.reduceFacilityInventory(facilityName, itemID, quantityToProcess);
-                int cost = costCalculator.calculateTotalCost(itemDetails, quantityOfItemInFacility, totalProcessingTime.get(0), travelTime, costOfFacility);
-                timeAndQuantity.add(totalProcessingTime.get(1).intValue());
-                timeAndQuantity.add(quantityToProcess);
-                timeAndQuantity.add(cost);
-                facilitySolution.put(facilityName, timeAndQuantity);
+                facilitySolution.put(facilityName, getProcessingSolution(completeProcessingDetails));
                 quantityToProcess = 0;
 
             }
@@ -188,6 +156,21 @@ public class OrderProcessor {
         return calculateProcessingEndDay((List) completeProcessingDetails.get(2),(int) completeProcessingDetails.get(3), (String)completeProcessingDetails.get(0), Integer.valueOf(completeProcessingDetails.get(1).toString().split("-")[1]));
     }
 
-    private 
+    private List <Integer> getProcessingSolution(List completeProcessingDetails) throws NullException {
+        List itemDetails = (List)(completeProcessingDetails.get(2));
+        String itemID = itemDetails.get(0).toString();
+        String facilityName = (String)completeProcessingDetails.get(0);
+        int quantityOfItemInFacility = orderManager.getQuantityOfItem(facilityName, itemDetails);
+        int travelTime = (int)completeProcessingDetails.get(3);
+        int costOfFacility = Integer.valueOf(orderManager.getFacilityDetails(facilityName).get(2).toString());
+        List <Integer> timeAndQuantity = new ArrayList<>();
+        List<Double> totalProcessingTime = calculateTotalProcessingTime(completeProcessingDetails);
+        orderManager.reduceFacilityInventory(facilityName, itemID, quantityOfItemInFacility);
+        int cost = costCalculator.calculateTotalCost(itemDetails, quantityOfItemInFacility, totalProcessingTime.get(0), travelTime, costOfFacility );
+        timeAndQuantity.add(totalProcessingTime.get(1).intValue());
+        timeAndQuantity.add(quantityOfItemInFacility);
+        timeAndQuantity.add(cost);
+        return timeAndQuantity;
+    }
 
 }

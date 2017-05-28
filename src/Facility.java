@@ -33,5 +33,7 @@ interface Facility {
     Map<String, Integer> findFacilitiesWithShortestPath(String destination, List facilitiesWithItem) throws NullException;
 
     int getQuantityOfItem(String facilityName, List itemDetails) throws NullException;
-}
 
+    int getTravelTimeInDays(String source, String destination) throws NullException;
+
+}

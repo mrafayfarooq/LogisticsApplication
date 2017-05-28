@@ -343,4 +343,8 @@ public class FacilityImplementation implements Facility {
     public Map<String, Integer> findFacilitiesWithShortestPath(String destination, List facilitiesWithItem) throws NullException {
         return shortestPathCalculator.findFacilitiesWithShortestPath(destination, facilitiesWithItem);
     }
+
+    public int getTravelTimeInDays(String source, String destination) throws NullException {
+        return shortestPathCalculator.getTravelTimeInDays(source, destination);
+    }
 }

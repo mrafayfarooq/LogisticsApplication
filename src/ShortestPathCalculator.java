@@ -191,4 +191,14 @@ public class ShortestPathCalculator {
         }
         return facilityWithShortestPath;
     }
+    public int getTravelTimeInDays(String source, String destination) throws NullException {
+        List path = getShortestPath(source, destination);
+        float days = 0;
+        if(path!= null) {
+            int distance = (int) path.get(path.size()-1);
+            days = (float) distance/400;
+        }
+        return (int)Math.ceil(days);
+    }
+
 }
