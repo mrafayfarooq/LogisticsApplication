@@ -13,7 +13,7 @@ import java.util.*;
 
 public class ShortestPathCalculator {
     private static ShortestPathCalculator instance;
-    private FacilityImplementation facilityImpl;
+    private final FacilityImplementation facilityImpl;
     private final Map<Integer, Map<Integer, List<Integer>>> shortestDistance;  // Each facility ID is mapped into a Map which contains the ID of the destination and details of distance.
     public static ShortestPathCalculator getInstance(FacilityImplementation facilityImplementation) {
         // Get Singleton instance of Class
@@ -144,7 +144,7 @@ public class ShortestPathCalculator {
         calculateSolution(distance, src, source);
     }
     // Return Shortest Distance from all the facilities.
-    Map<Integer, Map<Integer, List<Integer>>> getShortestDistance() {
+    private Map<Integer, Map<Integer, List<Integer>>> getShortestDistance() {
         return shortestDistance;
     }
     /**

@@ -8,7 +8,7 @@ import java.util.*;
  * to find arrival day of an order, set initial schedule and setting
  * the schedule of the facility.
  */
-public class Scheduler {
+class Scheduler {
     private final HashMap<Integer, Map<Integer, Integer>> scheduler = new HashMap<>(); // <FacilityName, List of first 20 schedule>
 
     /**+
@@ -22,7 +22,7 @@ public class Scheduler {
             else {
                 Map<Integer, Integer> copies = new HashMap<>();
                 // Set the schedule for first 20 days.
-                for(int j=0; j<=20; j++) {
+                for(int j=1; j<=20; j++) {
                    copies.put(j, Integer.valueOf(facilityUtility.get(i).get(1)));
                }
                 scheduler.put(i, copies);
@@ -35,7 +35,7 @@ public class Scheduler {
      * @return list of facility schedule
      * @throws NullException if the facility does not exist
      */
-    public Map<Integer, Integer> getScheduleOfFacility(int facilityID) throws NullException {
+    public Map<Integer, Integer> getScheduleOfFacility(int facilityID) {
         return this.scheduler.get(facilityID);
     }
     /**+
@@ -49,7 +49,7 @@ public class Scheduler {
      * @throws NullException if facility name not found.
      */
 
-    public int findArrivalDay(int startDay, int quantityToProcess, int quantityOfItemsInFacility, List<String> facilityDetails) throws NullException {
+    public int findArrivalDay(int startDay, int quantityToProcess, int quantityOfItemsInFacility, List<String> facilityDetails) {
         int facilityID = Integer.valueOf(facilityDetails.get(0));
         int processingPower = Integer.valueOf(facilityDetails.get(1));
         int endDay = startDay;
@@ -65,7 +65,7 @@ public class Scheduler {
             }
         }
         this.scheduler.put(facilityID,scheduler);
-        return endDay-1;
+        return endDay;
     }
 
     /**+
@@ -77,7 +77,7 @@ public class Scheduler {
      * @return List includes Processing Days: Time it take for the facility to process the item, End Day: The end day of the facility.
      * @throws NullException
      */
-    public List setSchedule(int startDay, int quantityToProcess, int quantityOfItemsInFacility, List<String> facilityDetails) throws NullException {
+    public List setSchedule(int startDay, int quantityToProcess, int quantityOfItemsInFacility, List<String> facilityDetails) {
         List<Double> processingDayList = new ArrayList();
         Double processingDay = 0.0;
         int facilityId = Integer.valueOf(facilityDetails.get(0));
@@ -86,23 +86,23 @@ public class Scheduler {
         int endDay = startDay;
         while (quantityToProcess > 0 && quantityOfItemsInFacility > 0) {
            if(scheduler.containsKey(endDay)) {
-               if (scheduler.get(endDay-1) != 0) {
+               if (scheduler.get(endDay) != 0) {
                    if (scheduler.get(endDay) > quantityToProcess) {
                        quantityOfItemsInFacility = quantityOfItemsInFacility - quantityToProcess;
-                       scheduler.put(endDay-1, scheduler.get(endDay) - quantityToProcess);
+                       scheduler.put(endDay, scheduler.get(endDay) - quantityToProcess);
                        processingDay = processingDay +  quantityToProcess/scheduler.get(endDay);
                        quantityToProcess = 0;
                        endDay++;
                    } else {
                        if (processingPower > quantityOfItemsInFacility) {
-                           scheduler.put(endDay-1, processingPower - quantityOfItemsInFacility);
+                           scheduler.put(endDay, processingPower - quantityOfItemsInFacility);
                            processingDay = processingDay +  ((float)quantityOfItemsInFacility / processingPower);
                            quantityOfItemsInFacility = 0;
                            endDay++;
                        } else {
                            quantityToProcess = quantityToProcess - scheduler.get(endDay);
                            quantityOfItemsInFacility = quantityOfItemsInFacility - processingPower;
-                           scheduler.put(endDay-1, 0);
+                           scheduler.put(endDay, 0);
                            processingDay++;
                            endDay++;
                        }

@@ -4,7 +4,7 @@ import java.util.*;
  * Created by Muhammad Rafay on 5/3/17.
  */
 public class OrderManager {
-    private FacilityManager facilityManager;
+    private final FacilityManager facilityManager;
     private OrderLoader orderLoader;
     private Order order;
 
@@ -22,7 +22,7 @@ public class OrderManager {
         this.orderLoader = new OrderLoader(parserContext.getEntries("Orders"));
     }
 
-    public TreeMap<String, List<String>> getOrders() {
+    private TreeMap<String, List<String>> getOrders() {
         return this.orderLoader.getOrders();
     }
 

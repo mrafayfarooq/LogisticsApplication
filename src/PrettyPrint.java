@@ -163,15 +163,29 @@ class PrettyPrint  {
         int i = 1;
         int totalCost = 0;
         int totalQuantity = 0;
+        List arrivalDayList = new ArrayList();
+
         for (Map.Entry<String, List<Integer>> entry : facilitySolution.entrySet()) {
             formatter.format("%8s %-19s %-12s %-12s %-12s\n", i+")", entry.getKey(), entry.getValue().get(1), costFormatter.format(entry.getValue().get(2)), entry.getValue().get(0));
             i++;
             totalCost = totalCost + entry.getValue().get(2);
+            totalQuantity = totalQuantity + entry.getValue().get(1);
+            arrivalDayList.add(entry.getValue().get(0));
         }
-        formatter.format("%18s %18s %8s %19s \n", "TOTAL ", "Quantity", totalCost,  "Arrival Day");
+        String arrivalDay;
+        if(Collections.max(arrivalDayList) == Collections.min(arrivalDayList)) {
+            arrivalDay = "[" + Collections.min(arrivalDayList) + "]";
+
+        } else {
+            arrivalDay = "[" + Collections.min(arrivalDayList) + " - " + Collections.max(arrivalDayList) + "]";
+        }
+        formatter.format("%15s %16s %17s %12s\n", "TOTAL ", totalQuantity,costFormatter.format(totalCost),  arrivalDay);
         System.out.println(formatter);
         System.out.println();
     }
 }
+
+
+
 
 

@@ -40,7 +40,7 @@ class ItemManager {
      *
      */
     public Boolean checkItem(String itemID) {
-       return item.get(itemID) == null ?  false :  true;
+       return item.get(itemID) != null;
     }
 
     public int getItemCost(String itemID) {

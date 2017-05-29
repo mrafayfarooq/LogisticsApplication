@@ -18,7 +18,7 @@ import java.util.List;
 
 
 class InventoryManager {
-    private HashMap<String, List<String>> facilityInventory = new HashMap<>();
+    private final HashMap<String, List<String>> facilityInventory = new HashMap<>();
     private final String itemIdTag;
     private final String quantityTag;
 

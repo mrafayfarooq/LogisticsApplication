@@ -10,13 +10,13 @@ class Main {
             // Loading Item Catalog and its details
             ItemManager.getInstance().loadItems(parserContext.getEntries("ItemCatalog"));
             // Loading Facility and it's details
-            FacilityManager.getInstance().loadFacility(parserContext, "Facilities&Networks", "FacilityInventory");
+            FacilityManager.getInstance().loadFacility(parserContext);
             // Print Outputs
-     //       FacilityManager.getInstance().printPrettyOutput();
+            FacilityManager.getInstance().printPrettyOutput();
             // Process Orders
             FacilityManager.getInstance().processOrders(parserContext);
             // Print Outputs
-    //        FacilityManager.getInstance().printPrettyOutput();
+            FacilityManager.getInstance().printPrettyOutput();
 
         } catch (NullException e) {
             e.printException();

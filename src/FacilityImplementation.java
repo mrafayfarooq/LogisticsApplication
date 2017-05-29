@@ -19,7 +19,7 @@ public class FacilityImplementation implements Facility {
     private final HashMap<String, List<String>> network = new HashMap<>(); // <FacilityName, List of Facility connected>
     private final InventoryManager inventoryManager; // Inventory Object for managing facility Inventory
     private final ShortestPathCalculator shortestPathCalculator; // Object to calculate shortest path
-    private Scheduler scheduler;
+    private final Scheduler scheduler;
 
     /**
      * +
@@ -75,7 +75,7 @@ public class FacilityImplementation implements Facility {
                     networkLinks.add(networkId + "-" + location + "-" + distance);
                 }
                 // Adding networkDetails into List
-                List<String> networkDetails = new ArrayList(networkLinks);
+                List<String> networkDetails = new ArrayList<String>(networkLinks);
                 network.putIfAbsent(getFacilityString(Integer.valueOf(facilityId)), networkDetails);
             }
         } catch (NullException e) {
@@ -116,7 +116,7 @@ public class FacilityImplementation implements Facility {
             facilityUtility.put(Integer.valueOf(facilityId), facilityDetailsUtility);
         }
         // Setting the Scheduler.
-        this.setInitialSchedule(facilityUtility);
+        this.setInitialSchedule();
     }
 
     /**
@@ -128,8 +128,7 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if the facility does not exist
      */
     public Map<Integer, Integer> getScheduleOfFacility(String facilityName) throws NullException {
-        Map<Integer, Integer> shallowCopyOfScheduler = new HashMap<Integer, Integer>(this.scheduler.getScheduleOfFacility(getFacilityId(facilityName)));
-        return shallowCopyOfScheduler;
+        return new HashMap<Integer, Integer>(this.scheduler.getScheduleOfFacility(getFacilityId(facilityName)));
     }
 
     /**
@@ -144,8 +143,7 @@ public class FacilityImplementation implements Facility {
         if (this.facility.get(facilityName) == null) {
             throw new NullException("Details for Facility " + facilityName);
         } else {
-            List<String> shallowCopyDetails = new ArrayList<String>(this.facility.get(facilityName));
-            return shallowCopyDetails;
+            return new ArrayList<String>(this.facility.get(facilityName));
         }
     }
 
@@ -161,8 +159,7 @@ public class FacilityImplementation implements Facility {
         if (this.network.get(facilityName) == null) {
             throw new NullException("Network for facility name " + facilityName);
         } else {
-            List<String> shallowCopyDetails = new ArrayList<String>(this.network.get(facilityName));
-            return shallowCopyDetails;
+            return new ArrayList<String>(this.network.get(facilityName));
         }
     }
 
@@ -175,8 +172,7 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if the facility does not exist
      */
     public List<String> getInventory(String facilityName) throws NullException {
-        List<String> shallowCopyDetails = new ArrayList<String>(inventoryManager.getDetails(facilityName));
-        return shallowCopyDetails;
+        return new ArrayList<String>(inventoryManager.getDetails(facilityName));
     }
 
     /**
@@ -188,8 +184,7 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if the facility does not exist
      */
     public List<String> getDepletedInventory(String facilityName) throws NullException {
-        List<String> shallowCopyDetails = new ArrayList<String>(inventoryManager.getDepletedInventory(facilityName));
-        return shallowCopyDetails;
+        return new ArrayList<String>(inventoryManager.getDepletedInventory(facilityName));
     }
 
     /**
@@ -293,11 +288,10 @@ public class FacilityImplementation implements Facility {
      * +
      * Set the Initial Scheduler of the facility
      *
-     * @param facilityUtility
      * @throws NullException if facility is not found
      */
-    private void setInitialSchedule(HashMap<Integer, List<String>> facilityUtility) throws NullException {
-        this.scheduler.setInitialSchedule(facilityUtility);
+    private void setInitialSchedule() throws NullException {
+        this.scheduler.setInitialSchedule(FacilityImplementation.facilityUtility);
     }
 
     /**

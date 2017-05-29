@@ -10,7 +10,7 @@ import java.util.TreeMap;
 /**
  * Created by Muhammad Rafay on 5/3/17.
  */
-public class OrderLoader {
+class OrderLoader {
     private final TreeMap<String, List<String>> orderDetail = new TreeMap<>();
 
     OrderLoader(NodeList orderDetails) {

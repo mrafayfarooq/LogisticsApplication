@@ -2,7 +2,6 @@
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +15,7 @@ import java.util.Map;
  */
 
 public class FacilityManager {
-    private ArrayList<Facility> facility = new ArrayList<>();   // Collection of Facility
+    private final ArrayList<Facility> facility = new ArrayList<>();   // Collection of Facility
     private static FacilityManager instance;    // Singleton Instance
 
 
@@ -25,7 +24,7 @@ public class FacilityManager {
      *
      * @throws NullException if invalid extension is passed
      */
-    public static FacilityManager getInstance() throws NullException {
+    public static FacilityManager getInstance() {
         if (instance == null) {
             instance = new FacilityManager();
         }
@@ -41,16 +40,14 @@ public class FacilityManager {
      * Throws Exception if Context is null or input details for facility is wrong.
      *
      * @param parserContext     Context of Parser
-     * @param facilityNetworks  Details of Facility Networks
-     * @param facilityInventory Details of Facility Inventory
      * @throws NullException if any params is Null or not found.
      */
 
-    public void loadFacility(ParserContext parserContext, String facilityNetworks, String facilityInventory) throws NullException {
+    public void loadFacility(ParserContext parserContext) throws NullException {
         if (parserContext == null) {
             throw new NullException("Parser Context" + null);
         } else {
-            NodeList[] facilityDetail = {parserContext.getEntries(facilityNetworks), parserContext.getEntries(facilityInventory)};
+            NodeList[] facilityDetail = {parserContext.getEntries("Facilities&Networks"), parserContext.getEntries("FacilityInventory")};
             this.facility.add(new FacilityImplementation(facilityDetail));
         }
     }
