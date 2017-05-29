@@ -12,11 +12,11 @@ class Main {
             // Loading Facility and it's details
             FacilityManager.getInstance().loadFacility(parserContext, "Facilities&Networks", "FacilityInventory");
             // Print Outputs
-            FacilityManager.getInstance().printPrettyOutput();
+     //       FacilityManager.getInstance().printPrettyOutput();
             // Process Orders
             FacilityManager.getInstance().processOrders(parserContext);
             // Print Outputs
-            FacilityManager.getInstance().printPrettyOutput();
+    //        FacilityManager.getInstance().printPrettyOutput();
 
         } catch (NullException e) {
             e.printException();

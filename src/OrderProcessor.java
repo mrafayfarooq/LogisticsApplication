@@ -16,7 +16,6 @@ public class OrderProcessor {
     OrderManager orderManager;
     ItemManager itemManager;
     CostCalculator costCalculator;
-    DecimalFormat twoDForm = new DecimalFormat(".");
 
     OrderProcessor(OrderManager orderManager) {
         this.itemManager = ItemManager.getInstance();
@@ -29,7 +28,7 @@ public class OrderProcessor {
             // Get Order Details
             List itemOrdered = entry.getValue().subList(1,entry.getValue().size());
             String orderDetails = entry.getValue().get(0);
-            prettyPrint(entry);
+            PrettyPrint.prettyPrint(entry);
 
             // Traverse all the order
             for(int i=0; i<itemOrdered.size(); i++) {
@@ -112,7 +111,7 @@ public class OrderProcessor {
             String facilityName = recordDetails.split("=")[0];
             int quantityOfItemInFacility = orderManager.getQuantityOfItem(facilityName, itemDetails);
             if(quantityToProcess <= 0) {
-                prettyPrint(facilitySolution);
+                PrettyPrint.prettyPrint(facilitySolution);
                 return;
             }
             int travelTime = orderManager.getTravelTimeInDays(facilityName, orderDetails.split("-")[0]);
@@ -129,29 +128,9 @@ public class OrderProcessor {
             facilityRecords.remove(0);
             facilityRecords = new ArrayList(getProcessingTimeOfFacilities(facilityRecords, itemDetails, orderDetails));
         }
-        prettyPrint(facilitySolution);
+        PrettyPrint.prettyPrint(facilitySolution);
     }
-       private void prettyPrint(Entry<String, List<String>> entry) {
-        System.out.println("Order Id:   " + entry.getKey());
-        System.out.println("Order Time: " + entry.getValue().get(0).split("-")[1]);
-        System.out.println("Order Destination:   " + entry.getValue().get(0).split("-")[0]);
-        System.out.println("List of Order Items:");
-        for(int i=1; i< entry.getValue().size(); i++) {
-            System.out.print(i + ")" + "  Item ID:  " + entry.getValue().get(i).split(":")[0] + ",");
-            System.out.print("  Quantity:  " + entry.getValue().get(i).split(":")[1]);
-            System.out.println();
-        }
-        System.out.println("Processing Solution:");
 
-    }
-    private void prettyPrint(Map<String, List<Integer>> facilitySolution) {
-        Formatter formatter = new Formatter();
-        formatter.format("%-18s %-12s %-12s %-12s \n", "Facility ", "Quantity", "Cost",  "Arrival Day");
-        for (Map.Entry<String, List<Integer>> entry : facilitySolution.entrySet()) {
-            formatter.format("%-18s %-12s %-12s %-12s\n", entry.getKey(), entry.getValue().get(1), entry.getValue().get(2), entry.getValue().get(0));
-        }
-        System.out.println(formatter);
-    }
     private List<Double> calculateTotalProcessingTime(List completeProcessingDetails) throws NullException {
         return calculateProcessingEndDay((List) completeProcessingDetails.get(2),(int) completeProcessingDetails.get(3), (String)completeProcessingDetails.get(0), Integer.valueOf(completeProcessingDetails.get(1).toString().split("-")[1]));
     }

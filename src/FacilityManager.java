@@ -57,20 +57,8 @@ public class FacilityManager {
 
     public void printPrettyOutput() throws NullException {
         for (Facility facility : this.facility) {
-            Output output = new Output(facility);
+            PrettyPrint output = new PrettyPrint(facility);
             output.printFacilityDetails();
-            output.printItemCatalog();
-            output.printShortestPath("Santa Fe, NM", "Chicago, IL");
-            output.printShortestPath("Santa Fe, NM", "Chicago, IL");
-            output.printShortestPath("Atlanta, GA", "St. Louis, MO");
-            output.printShortestPath("Seattle, WA", "Nashville, TN");
-            output.printShortestPath("New York City, NY", "Phoenix, AZ");
-            output.printShortestPath("Fargo, ND", "Austin, TX");
-            output.printShortestPath("Denver, CO", "Miami, FL");
-            output.printShortestPath("Austin, TX", "Norfolk, VA");
-            output.printShortestPath("Miami, FL", "Seattle, WA");
-            output.printShortestPath("Los Angeles, CA", "Chicago, IL");
-            output.printShortestPath("Detroit, MI", "Nashville, TN");
         }
     }
 

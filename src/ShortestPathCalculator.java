@@ -26,7 +26,7 @@ public class ShortestPathCalculator {
     private ShortestPathCalculator(FacilityImplementation facilityImplementation) {
         shortestDistance = new HashMap<>();
         facilityImpl = facilityImplementation;
-        int facilities = facilityImpl.getFacilityQuantities();
+        int facilities = FacilityImplementation.getFacilityQuantities();
         int[][] network = new int[facilities+1][facilities+1];
         // Initializing the network graph
         for(int i = 1; i<=facilities; i++) {
@@ -67,7 +67,7 @@ public class ShortestPathCalculator {
         int min = Integer.MAX_VALUE, min_index = -1;
 
         // Looping through all facilities and checking if the facility
-        for (int v = 1; v <= facilityImpl.getFacilityQuantities(); v++)
+        for (int v = 1; v <= FacilityImplementation.getFacilityQuantities(); v++)
             if (!seen[v] && dist[v] <= min) {
                 min = dist[v];
                 min_index = v;
@@ -86,7 +86,7 @@ public class ShortestPathCalculator {
      */
     private void calculateSolution(int[] dist, int src, int[] source) {
         Map<Integer, List<Integer>> shortestPaths = new HashMap<>();
-        for (int i = 1; i <= facilityImpl.getFacilityQuantities(); i++) {
+        for (int i = 1; i <= FacilityImplementation.getFacilityQuantities(); i++) {
             List<Integer> paths = new ArrayList();
             paths.add(dist[i]);
             calculatePath(source,i, paths);
@@ -103,7 +103,7 @@ public class ShortestPathCalculator {
      * @param src the source facility to start the algorithm
      */
     private void calculateShortestPath(int graph[][], int src) {
-        int facilities = facilityImpl.getFacilityQuantities();
+        int facilities = FacilityImplementation.getFacilityQuantities();
         int distance[] = new int[facilities+1]; // Array which will hold all the distances
         Boolean seen[] = new Boolean[facilities+1];
         int source[] = new int[facilities+1];
@@ -167,8 +167,8 @@ public class ShortestPathCalculator {
             // Adding path into Path List
             List path = new ArrayList();
             for (int values : pathDetails.get(facilityImpl.getFacilityId(destination))) {
-                if (values <= facilityImpl.getFacilityQuantities()) {
-                    path.add(facilityImpl.getFacilityString(values));
+                if (values <= FacilityImplementation.getFacilityQuantities()) {
+                    path.add(FacilityImplementation.getFacilityString(values));
                 }
             }
             path.add(distance);

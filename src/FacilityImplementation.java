@@ -336,8 +336,8 @@ public class FacilityImplementation implements Facility {
         return inventoryManager.getQuantityOfItem(facilityName, itemDetails);
     }
 
-    public int getFacilityQuantities() {
-        return facility.size();
+    public static int getFacilityQuantities() {
+        return facilityUtility.size();
     }
 
     public Map<String, Integer> findFacilitiesWithShortestPath(String destination, List facilitiesWithItem) throws NullException {
