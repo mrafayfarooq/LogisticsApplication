@@ -1,11 +1,4 @@
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 import java.util.*;
 
@@ -97,13 +90,8 @@ class OrderProcessor {
 
     private List<Entry<String,Integer>> sort(Map map) {
         Set<Entry<String, Integer>> set = map.entrySet();
-        ArrayList<Entry<String, Integer>> list = new ArrayList<Entry<String, Integer>>(set);
-        Collections.sort( list, new Comparator<Map.Entry<String, Integer>>() {
-            public int compare( Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2 )
-            {
-                return (o1.getValue()).compareTo( o2.getValue() );
-            }
-        } );
+        ArrayList<Entry<String, Integer>> list = new ArrayList<>(set);
+        list.sort(Comparator.comparing(o -> (o.getValue())));
         return list;
     }
 

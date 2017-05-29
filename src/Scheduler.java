@@ -33,7 +33,6 @@ class Scheduler {
      * Get Schedule of Facility
      * @param facilityID Id of the facility
      * @return list of facility schedule
-     * @throws NullException if the facility does not exist
      */
     public Map<Integer, Integer> getScheduleOfFacility(int facilityID) {
         return this.scheduler.get(facilityID);
@@ -46,7 +45,6 @@ class Scheduler {
      * @param quantityOfItemsInFacility number of items in facility
      * @param facilityDetails details of facility
      * @return arrival day of the item.
-     * @throws NullException if facility name not found.
      */
 
     public int findArrivalDay(int startDay, int quantityToProcess, int quantityOfItemsInFacility, List<String> facilityDetails) {
@@ -75,7 +73,6 @@ class Scheduler {
      * @param quantityOfItemsInFacility number of item in facility
      * @param facilityDetails details of facility
      * @return List includes Processing Days: Time it take for the facility to process the item, End Day: The end day of the facility.
-     * @throws NullException
      */
     public List setSchedule(int startDay, int quantityToProcess, int quantityOfItemsInFacility, List<String> facilityDetails) {
         List<Double> processingDayList = new ArrayList();
@@ -116,7 +113,7 @@ class Scheduler {
         }
         this.scheduler.put(facilityId, scheduler);
         processingDayList.add(processingDay);
-        processingDayList.add(Double.valueOf(endDay-1));
+        processingDayList.add((double) (endDay - 1));
         return processingDayList;
     }
 }

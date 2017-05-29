@@ -6,7 +6,6 @@ import java.util.*;
 public class OrderManager {
     private final FacilityManager facilityManager;
     private OrderLoader orderLoader;
-    private Order order;
 
     private static OrderManager instance;    // Singleton Instance
 
@@ -44,12 +43,12 @@ public class OrderManager {
         facilityManager.reduceFacilityInventory(facilityName, itemId, quantity);
     }
 
-    public int findArrivalDay(Integer startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException {
-        return facilityManager.findArrivalDay(startDay, qunatityToProcess, facilityName, itemDetail);
+    public int findArrivalDay(Integer startDay, int quantityToProcess, String facilityName, List itemDetail) throws NullException {
+        return facilityManager.findArrivalDay(startDay, quantityToProcess, facilityName, itemDetail);
     }
 
-    public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
-        return this.facilityManager.setSchedule(startDay, qunatityToProcess, facilityName, itemDetails);
+    public List setSchedule(int startDay, int quantityToProcess, String facilityName, List itemDetails) throws NullException {
+        return this.facilityManager.setSchedule(startDay, quantityToProcess, facilityName, itemDetails);
     }
 
     public Map<String, Integer> findFacilitiesWithShortestPath(String destination, List facilitiesWithItem) throws NullException {

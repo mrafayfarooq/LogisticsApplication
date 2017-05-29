@@ -10,6 +10,7 @@ import org.w3c.dom.NodeList;
  * This class takes a string in it's constructor and make a relevant object.
  * The string is valid file extension/type of input file.
  */
+@SuppressWarnings("SameParameterValue")
 class ParserContext {
     private Parser parser;
 

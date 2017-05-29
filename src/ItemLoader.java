@@ -6,6 +6,8 @@ import java.util.TreeMap;
 
 /**
  * Created by Muhammad Rafay on 5/28/17.
+ *
+ * This class loads all the item from a file
  */
 public class ItemLoader {
     private static ItemLoader instance;

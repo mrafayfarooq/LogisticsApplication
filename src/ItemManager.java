@@ -1,5 +1,3 @@
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import java.util.TreeMap;
 /**
@@ -36,12 +34,21 @@ class ItemManager {
             return item;
         }
     }
+
     /**+
-     *
+     * Check if the item exist in the inventory
+     * @param itemID id of the item.
+     * @return boolean
      */
     public Boolean checkItem(String itemID) {
        return item.get(itemID) != null;
     }
+
+    /**+
+     * Utility function to get the cost of the item
+     * @param itemID ItemID
+     * @return cost
+     */
 
     public int getItemCost(String itemID) {
         return Integer.parseInt(item.get(itemID));

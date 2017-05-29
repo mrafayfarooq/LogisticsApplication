@@ -75,7 +75,7 @@ public class FacilityImplementation implements Facility {
                     networkLinks.add(networkId + "-" + location + "-" + distance);
                 }
                 // Adding networkDetails into List
-                List<String> networkDetails = new ArrayList<String>(networkLinks);
+                List<String> networkDetails = new ArrayList<>(networkLinks);
                 network.putIfAbsent(getFacilityString(Integer.valueOf(facilityId)), networkDetails);
             }
         } catch (NullException e) {
@@ -128,7 +128,7 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if the facility does not exist
      */
     public Map<Integer, Integer> getScheduleOfFacility(String facilityName) throws NullException {
-        return new HashMap<Integer, Integer>(this.scheduler.getScheduleOfFacility(getFacilityId(facilityName)));
+        return new HashMap<>(this.scheduler.getScheduleOfFacility(getFacilityId(facilityName)));
     }
 
     /**
@@ -143,7 +143,7 @@ public class FacilityImplementation implements Facility {
         if (this.facility.get(facilityName) == null) {
             throw new NullException("Details for Facility " + facilityName);
         } else {
-            return new ArrayList<String>(this.facility.get(facilityName));
+            return new ArrayList<>(this.facility.get(facilityName));
         }
     }
 
@@ -159,7 +159,7 @@ public class FacilityImplementation implements Facility {
         if (this.network.get(facilityName) == null) {
             throw new NullException("Network for facility name " + facilityName);
         } else {
-            return new ArrayList<String>(this.network.get(facilityName));
+            return new ArrayList<>(this.network.get(facilityName));
         }
     }
 
@@ -172,7 +172,7 @@ public class FacilityImplementation implements Facility {
      * @throws NullException if the facility does not exist
      */
     public List<String> getInventory(String facilityName) throws NullException {
-        return new ArrayList<String>(inventoryManager.getDetails(facilityName));
+        return new ArrayList<>(inventoryManager.getDetails(facilityName));
     }
 
     /**
@@ -198,21 +198,6 @@ public class FacilityImplementation implements Facility {
      */
     public List<String> getShortestPath(String source, String destination) throws NullException {
         return shortestPathCalculator.getShortestPath(source, destination);
-    }
-
-    /**
-     * +
-     * Get Processing Power of Facility
-     *
-     * @param facilityName name of the facility
-     * @return processing power in integer
-     */
-    public int getProcessingPower(String facilityName) throws NullException {
-        if (facility.get(facilityName) == null)
-            throw new NullException("Facility " + facilityName);
-        else {
-            return Integer.valueOf(facility.get(facilityName).get(1));
-        }
     }
 
     /**
@@ -304,7 +289,7 @@ public class FacilityImplementation implements Facility {
      * @param facilityName      name of the facility which needs to process the item
      * @param itemDetails       details of the item
      * @return arrival day
-     * @throws NullException
+     * @throws NullException    if scheduler is null
      */
     public int findArrivalDay(int startDay, int quantityToProcess, String facilityName, List itemDetails) throws NullException {
         return this.scheduler.findArrivalDay(startDay, quantityToProcess, getQuantityOfItem(facilityName, itemDetails), getDetails(facilityName));
@@ -319,25 +304,50 @@ public class FacilityImplementation implements Facility {
      * @param facilityName      name of the facility which needs to process the item
      * @param itemDetails       details of the item
      * @return List includes Processing Days: Time it take for the facility to process the item, End Day: The end day of the facility.
-     * @throws NullException
+     * @throws NullException    if scheduler is null
      */
 
     public List setSchedule(int startDay, int quantityToProcess, String facilityName, List itemDetails) throws NullException {
         return this.scheduler.setSchedule(startDay, quantityToProcess, getQuantityOfItem(facilityName, itemDetails), getDetails(facilityName));
     }
 
+    /**+
+     * Get the quantity of items in the facility
+     * @param facilityName Name of Facility
+     * @param itemDetails details of item include name.
+     * @return quantity of items in the facility.
+     * @throws NullException if facilityName or Item not found.
+     */
     public int getQuantityOfItem(String facilityName, List itemDetails) throws NullException {
         return inventoryManager.getQuantityOfItem(facilityName, itemDetails);
     }
 
+    /**+
+     * Utility function to determine the number of facilities in total
+     * @return number of facilities
+     */
     public static int getFacilityQuantities() {
         return facilityUtility.size();
     }
 
+    /**+
+     * Find the shortest path from list of source to one destination .
+     * @param destination Name of Destination
+     * @param facilitiesWithItem List of Sources
+     * @return Mapping of list of facilities with shorted path
+     * @throws NullException if destination or source is null
+     */
     public Map<String, Integer> findFacilitiesWithShortestPath(String destination, List facilitiesWithItem) throws NullException {
         return shortestPathCalculator.findFacilitiesWithShortestPath(destination, facilitiesWithItem);
     }
 
+    /**+
+     * Get travel time in days
+     * @param source Source Facility
+     * @param destination Destination Facility.
+     * @return Number  in days.
+     * @throws NullException if source or destination are not found.
+     */
     public int getTravelTimeInDays(String source, String destination) throws NullException {
         return shortestPathCalculator.getTravelTimeInDays(source, destination);
     }

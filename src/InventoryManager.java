@@ -95,6 +95,13 @@ class InventoryManager {
             return this.facilityInventory.get(facilityName);
         }
     }
+
+    /**+
+     * Reduce the inventory after the order processed successfully.
+     * @param facilityName Name of the facility
+     * @param itemId ItemID
+     * @param quantity quantity to be reduced to
+     */
     public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
         List facilityInventory = this.facilityInventory.get(facilityName);
         int index = 0;

@@ -62,7 +62,7 @@ class PrettyPrint  {
                 List<String> inventoryDetails = Arrays.asList(list.toString().split(":"));
                 String formattedQuantity  = inventoryDetails.get(1);
                 String formattedItem  = inventoryDetails.get(0);
-                formatter.format("%-12s %-12s\n", formattedItem, formattedQuantity);
+                if(!formattedQuantity.equals("0")) formatter.format("%-12s %-12s\n", formattedItem, formattedQuantity);
             }
             System.out.println(formatter);
         }

@@ -22,7 +22,6 @@ public class FacilityManager {
     /**
      * Constructor providing Singleton
      *
-     * @throws NullException if invalid extension is passed
      */
     public static FacilityManager getInstance() {
         if (instance == null) {
@@ -69,28 +68,20 @@ public class FacilityManager {
         OrderManager.getInstance(this, parserContext).processOrders();
     }
 
-    public List getShortestPath(String source, String destination) throws NullException {
-        return facility.get(0).getShortestPath(source, destination);
-    }
-
     public List getFacilityDetails(String facilityName) throws NullException {
         return facility.get(0).getDetails(facilityName);
-    }
-
-    public List getInventory(String facilityName) throws NullException {
-        return facility.get(0).getInventory(facilityName);
     }
 
     public void reduceFacilityInventory(String facilityName, String itemId, int quantity) {
         facility.get(0).reduceFacilityInventory(facilityName, itemId, quantity);
     }
 
-    public int findArrivalDay(Integer startDay, int qunatityToProcess, String facilityName, List itemDetail) throws NullException {
-        return facility.get(0).findArrivalDay(startDay, qunatityToProcess, facilityName, itemDetail);
+    public int findArrivalDay(Integer startDay, int quantityToProcess, String facilityName, List itemDetail) throws NullException {
+        return facility.get(0).findArrivalDay(startDay, quantityToProcess, facilityName, itemDetail);
     }
 
-    public List setSchedule(int startDay, int qunatityToProcess, String facilityName, List itemDetails) throws NullException {
-        return this.facility.get(0).setSchedule(startDay, qunatityToProcess, facilityName, itemDetails);
+    public List setSchedule(int startDay, int quantityToProcess, String facilityName, List itemDetails) throws NullException {
+        return this.facility.get(0).setSchedule(startDay, quantityToProcess, facilityName, itemDetails);
     }
 
     public List getFacilitiesWithItem(String itemId) throws NullException {
