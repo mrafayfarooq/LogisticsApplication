@@ -9,8 +9,6 @@ class OrderProcessor {
     private final OrderManager orderManager;
     private final ItemManager itemManager;
     private final CostCalculator costCalculator;
-    private static int totalCost;
-    private static final DecimalFormat costFormatter = new DecimalFormat("$#,###");
 
     OrderProcessor(OrderManager orderManager) {
         this.itemManager = ItemManager.getInstance();
@@ -23,7 +21,6 @@ class OrderProcessor {
             // Get Order Details
             List itemOrdered = entry.getValue().subList(1,entry.getValue().size());
             String orderDetails = entry.getValue().get(0);
-            totalCost = 0;
             PrettyPrint.prettyPrint(entry);
 
             // Traverse all the order
@@ -44,8 +41,7 @@ class OrderProcessor {
                   //  System.out.println(facilityRecord);
                     System.out.println(itemDetails.get(0) + ":");
                     processEachItem(facilityRecord, itemDetails, orderDetails);
-                    if(i+1 == itemOrdered.size()) System.out.println("Total Cost:     " + costFormatter.format(totalCost));
-
+                    if(i+1 == itemOrdered.size()) costCalculator.printTotalCost();
                 } else {
                     System.out.println("Item does not exist");
                     return;
@@ -119,7 +115,7 @@ class OrderProcessor {
             itemDetails.set(1,Integer.toString(quantityToProcess));
             facilityRecords.remove(0);
             facilityRecords = new ArrayList(getProcessingTimeOfFacilities(facilityRecords, itemDetails, orderDetails));
-            totalCost = totalCost + facilitySolution.get(facilityName).get(2);
+            costCalculator.calculateTotalCost(costCalculator.getTotalCost() + facilitySolution.get(facilityName).get(2));
         }
         PrettyPrint.prettyPrint(facilitySolution);
     }

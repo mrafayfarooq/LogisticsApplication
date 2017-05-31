@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -5,6 +6,10 @@ import java.util.List;
  * This class is used to determine the cost of Order.
  */
 class CostCalculator {
+    private static int totalCost;
+    private static final DecimalFormat costFormatter = new DecimalFormat("$#,###");
+
+
     /**+
      * Calculate the total cost of an order using the following information.
      * @param itemDetails details of item - For Item Cost
@@ -31,4 +36,15 @@ class CostCalculator {
         return travelTime*500;
     }
 
-}
+    public int getTotalCost() {
+        return totalCost;
+    }
+
+    public void calculateTotalCost(int totalCost) {
+        this.totalCost = totalCost;
+    }
+    public void printTotalCost() {
+        System.out.println("Total Cost:     " + costFormatter.format(totalCost));
+        totalCost = 0;
+    }
+ }
