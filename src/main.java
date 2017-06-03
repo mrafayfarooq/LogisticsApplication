@@ -1,47 +1,25 @@
-import org.w3c.dom.NodeList;
 /**
  * Created by Muhammad Rafay on 4/8/17.
  */
-class main {
+
+class Main {
     public static void main(String[] args) {
-        String facilitiesAndNetworks = "inputs/Facilities&Network.xml";
-        String itemCatalog = "inputs/ItemCatalog.xml";
-        String facilityInventory = "inputs/FacilityInventory.xml";
-
-        XMLParser parser = new XMLParser();
         try {
-            parser.parseFileWithName(facilitiesAndNetworks);
-            NodeList parsedFile = parser.getXmlEntries();
-            Output out = new Output();
-
-            LogisticManager facility = LogisticFactory.getObject("Facility");
-            facility.load(parsedFile);
-            ((FacilityManager) facility).setScheduler();
-
-            LogisticManager network  = LogisticFactory.getObject("Network");
-            network.load(parsedFile);
-
-            LogisticManager inventory = LogisticFactory.getObject("Inventory");
-            parser.parseFileWithName(facilityInventory);
-            parsedFile = parser.getXmlEntries();
-            inventory.load(parsedFile);
-
-
-            out.printFacilityDetails(facility, network, inventory);
-
-
-
-            ItemManager itemManager = new ItemManager();
-            parser.parseFileWithName(itemCatalog);
-            parsedFile = parser.getXmlEntries();
-            itemManager.loadItems(parsedFile);
-
-            out.printItemCatalog(itemManager);
+            // Loading File with XML
+            ParserContext parserContext = new ParserContext("XML");
+            // Loading Item Catalog and its details
+            ItemManager.getInstance().loadItems(parserContext.getEntries("ItemCatalog"));
+            // Loading Facility and it's details
+            FacilityManager.getInstance().loadFacility(parserContext);
+            // Print Outputs
+            FacilityManager.getInstance().printPrettyOutput();
+            // Process Orders
+            FacilityManager.getInstance().processOrders(parserContext);
+            // Print Outputs
+            FacilityManager.getInstance().printPrettyOutput();
 
         } catch (NullException e) {
             e.printException();
         }
-
     }
 }
-
